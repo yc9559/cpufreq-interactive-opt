@@ -59,7 +59,9 @@ case "$target" in
 	#start iop
 
         # disable thermal bcl hotplug to switch governor
+        chmod 0644 /sys/module/msm_thermal/core_control/enabled
         echo 0 > /sys/module/msm_thermal/core_control/enabled
+        chmod 0444 /sys/module/msm_thermal/core_control/enabled
 
         # online CPU0
         echo 1 > /sys/devices/system/cpu/cpu0/online
@@ -151,7 +153,9 @@ case "$target" in
 	chmod 0444 /sys/devices/system/cpu/cpu4/cpufreq/interactive/ignore_hispeed_on_notif
 
         # re-enable thermal and BCL hotplug
+        chmod 0644 /sys/module/msm_thermal/core_control/enabled
         echo 1 > /sys/module/msm_thermal/core_control/enabled
+        chmod 0444 /sys/module/msm_thermal/core_control/enabled
 
         # Enable input boost configuration
         echo "0:1324800" > /sys/module/cpu_boost/parameters/input_boost_freq
