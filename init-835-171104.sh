@@ -32,6 +32,8 @@
 # LITTLE:   1104 performance
 # big:      1104 balanced
 
+target=`getprop ro.board.platform`
+
 case "$target" in
     "msm8998")
 
