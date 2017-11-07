@@ -188,30 +188,30 @@ case "$target" in
         echo "0:0 1:0 2:0 3:0 4:2208000 5:0 6:0 7:0" > /sys/module/cpu_boost/parameters/powerkey_input_boost_freq
         echo 400 > /sys/module/cpu_boost/parameters/powerkey_input_boost_ms
 
-    # from init.rc in xiaomi mi 6
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/timer_rate
-    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/timer_rate
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/timer_slack
-    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/timer_slack
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
-    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
-    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/target_loads
-    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/target_loads
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
-    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
-    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/boost
-    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/boost
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/boostpulse
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/input_boost
-    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/input_boost
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
-    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
-    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
+    # from init.rc in xiaomi mi 6 for recovery
+    # chown system system /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+    # chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+    # chown system system /sys/devices/system/cpu/cpufreq/interactive/timer_slack
+    # chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/timer_slack
+    # chown system system /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+    # chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+    # chown system system /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+    # chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+    # chown system system /sys/devices/system/cpu/cpufreq/interactive/target_loads
+    # chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/target_loads
+    # chown system system /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+    # chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+    # chown system system /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+    # chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+    # chown system system /sys/devices/system/cpu/cpufreq/interactive/boost
+    # chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/boost
+    # chown system system /sys/devices/system/cpu/cpufreq/interactive/boostpulse
+    # chown system system /sys/devices/system/cpu/cpufreq/interactive/input_boost
+    # chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/input_boost
+    # chown system system /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
+    # chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
+    # chown system system /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
+    # chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
 
         echo 0 > /dev/cpuset/background/cpus
         echo 0-2 > /dev/cpuset/system-background/cpus
