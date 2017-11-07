@@ -2322,7 +2322,8 @@ case "$target" in
     "msm8998")
 
 	echo 2 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
-	echo 60 > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
+	# echo 60 > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
+	echo 70 > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
 	echo 30 > /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres
 	echo 100 > /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms
 	echo 1 > /sys/devices/system/cpu/cpu4/core_ctl/is_big_cluster
@@ -2342,42 +2343,123 @@ case "$target" in
 	#start iop
 
         # disable thermal bcl hotplug to switch governor
+        chmod 0644 /sys/module/msm_thermal/core_control/enabled
         echo 0 > /sys/module/msm_thermal/core_control/enabled
+        chmod 0444 /sys/module/msm_thermal/core_control/enabled
+
+    # from init.rc in xiaomi mi 6
+    chown root root /sys/devices/root/cpu/cpufreq/interactive/timer_rate
+    chmod 0660 /sys/devices/root/cpu/cpufreq/interactive/timer_rate
+    chown root root /sys/devices/root/cpu/cpufreq/interactive/timer_slack
+    chmod 0660 /sys/devices/root/cpu/cpufreq/interactive/timer_slack
+    chown root root /sys/devices/root/cpu/cpufreq/interactive/min_sample_time
+    chmod 0660 /sys/devices/root/cpu/cpufreq/interactive/min_sample_time
+    chown root root /sys/devices/root/cpu/cpufreq/interactive/hispeed_freq
+    chmod 0660 /sys/devices/root/cpu/cpufreq/interactive/hispeed_freq
+    chown root root /sys/devices/root/cpu/cpufreq/interactive/target_loads
+    chmod 0660 /sys/devices/root/cpu/cpufreq/interactive/target_loads
+    chown root root /sys/devices/root/cpu/cpufreq/interactive/go_hispeed_load
+    chmod 0660 /sys/devices/root/cpu/cpufreq/interactive/go_hispeed_load
+    chown root root /sys/devices/root/cpu/cpufreq/interactive/above_hispeed_delay
+    chmod 0660 /sys/devices/root/cpu/cpufreq/interactive/above_hispeed_delay
+    chown root root /sys/devices/root/cpu/cpufreq/interactive/boost
+    chmod 0660 /sys/devices/root/cpu/cpufreq/interactive/boost
+    chown root root /sys/devices/root/cpu/cpufreq/interactive/boostpulse
+    chown root root /sys/devices/root/cpu/cpufreq/interactive/input_boost
+    chmod 0660 /sys/devices/root/cpu/cpufreq/interactive/input_boost
+    chown root root /sys/devices/root/cpu/cpufreq/interactive/boostpulse_duration
+    chmod 0660 /sys/devices/root/cpu/cpufreq/interactive/boostpulse_duration
+    chown root root /sys/devices/root/cpu/cpufreq/interactive/io_is_busy
+    chmod 0660 /sys/devices/root/cpu/cpufreq/interactive/io_is_busy
 
         # online CPU0
         echo 1 > /sys/devices/system/cpu/cpu0/online
 	# configure governor settings for little cluster
 	echo "interactive" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-	echo 0 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load
-	echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif
+    chmod 0644 /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load
+	chmod 0644 /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif
+	chmod 0644 /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
+    chmod 0644 /sys/devices/system/cpu/cpu0/cpufreq/interactive/boostpulse_duration
+	chmod 0644 /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load
+	chmod 0644 /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate
+	chmod 0644 /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq
+	chmod 0644 /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy
+	chmod 0644 /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
+	chmod 0644 /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time
+	chmod 0644 /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis
+	chmod 0644 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+	chmod 0644 /sys/devices/system/cpu/cpu0/cpufreq/interactive/ignore_hispeed_on_notif
+	echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load
+	echo 0 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif
 	echo "19000 1600000:99000" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
     echo 19000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/boostpulse_duration
-	echo 95 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load
+	echo 97 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load
 	echo 20000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate
 	echo 1248000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq
 	echo 0 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy
-	echo "37 400000:2 600000:64 800000:38 1000000:52 1200000:78 1400000:71 1600000:95 1800000:94" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
+	echo "40 400000:2 550000:60 800000:37 1000000:52 1200000:77 1400000:72 1600000:73 1800000:96" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
 	echo 19000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time
 	echo 19000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis
 	echo 300000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
 	echo 0 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/ignore_hispeed_on_notif
+    chmod 0444 /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load
+	chmod 0444 /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif
+	chmod 0444 /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
+    chmod 0444 /sys/devices/system/cpu/cpu0/cpufreq/interactive/boostpulse_duration
+	chmod 0444 /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load
+	chmod 0444 /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate
+	chmod 0444 /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq
+	chmod 0444 /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy
+	chmod 0444 /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
+	chmod 0444 /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time
+	chmod 0444 /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis
+	chmod 0444 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+	chmod 0444 /sys/devices/system/cpu/cpu0/cpufreq/interactive/ignore_hispeed_on_notif
+
         # online CPU4
         echo 1 > /sys/devices/system/cpu/cpu4/online
 	# configure governor settings for big cluster
-	echo "interactive" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
-	echo 0 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load
+	chmod 0644 /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
+    chmod 0644 /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load
+	chmod 0644 /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_migration_notif
+	chmod 0644 /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay
+    chmod 0644 /sys/devices/system/cpu/cpu4/cpufreq/interactive/boostpulse_duration
+	chmod 0644 /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load
+	chmod 0644 /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate
+	chmod 0644 /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq
+	chmod 0644 /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy
+	chmod 0644 /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads
+	chmod 0644 /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time
+	chmod 0644 /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis
+	chmod 0644 /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
+	chmod 0644 /sys/devices/system/cpu/cpu4/cpufreq/interactive/ignore_hispeed_on_notif
+	echo 1 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load
 	echo 1 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_migration_notif
-	echo "19000 1600000:99000 1900000:299000" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay
+	echo "19000 1550000:99000 1900000:299000" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay
     echo 19000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/boostpulse_duration
 	echo 97 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load
 	echo 20000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate
 	echo 1248000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq
-	echo 0 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy
-	echo "88 400000:2 600000:41 800000:82 1000000:69 1200000:75 1400000:77 1600000:83 1800000:98" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads
+	echo 1 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy
+	echo "88 400000:2 600000:41 800000:82 1000000:69 1200000:75 1400000:77 1550000:83 1800000:98" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads
 	echo 19000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time
 	echo 19000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis
 	echo 300000 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
 	echo 0 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/ignore_hispeed_on_notif
+    chmod 0444 /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
+    chmod 0444 /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load
+	chmod 0444 /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_migration_notif
+	chmod 0444 /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay
+    chmod 0444 /sys/devices/system/cpu/cpu4/cpufreq/interactive/boostpulse_duration
+	chmod 0444 /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load
+	chmod 0444 /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate
+	chmod 0444 /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq
+	chmod 0444 /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy
+	chmod 0444 /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads
+	chmod 0444 /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time
+	chmod 0444 /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis
+	chmod 0444 /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
+	chmod 0444 /sys/devices/system/cpu/cpu4/cpufreq/interactive/ignore_hispeed_on_notif
 
         # re-enable thermal and BCL hotplug
         echo 1 > /sys/module/msm_thermal/core_control/enabled
@@ -2482,10 +2564,12 @@ case "$target" in
 	echo N > /sys/module/lpm_levels/system/perf/perf-l2-dynret/idle_enabled
 	echo N > /sys/module/lpm_levels/system/perf/perf-l2-ret/idle_enabled
 	echo N > /sys/module/lpm_levels/parameters/sleep_disabled
+    
         echo 0 > /dev/cpuset/background/cpus
         echo 0-2 > /dev/cpuset/system-background/cpus
         echo 4-7 > /dev/cpuset/foreground/boost/cpus
-        echo 0-2,4-7 > /dev/cpuset/foreground/cpus
+        # echo 0-2,4-7 > /dev/cpuset/foreground/cpus
+        echo 0-2,4-6 > /dev/cpuset/foreground/cpus
         echo 0 > /proc/sys/kernel/sched_boost
     ;;
 esac
