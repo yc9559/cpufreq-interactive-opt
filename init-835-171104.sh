@@ -64,34 +64,47 @@ case "$target" in
         chmod 0444 /sys/module/msm_thermal/core_control/enabled
 
     # from init.rc in xiaomi mi 6
-    chown root root /sys/devices/root/cpu/cpufreq/interactive/timer_rate
-    chmod 0660 /sys/devices/root/cpu/cpufreq/interactive/timer_rate
-    chown root root /sys/devices/root/cpu/cpufreq/interactive/timer_slack
-    chmod 0660 /sys/devices/root/cpu/cpufreq/interactive/timer_slack
-    chown root root /sys/devices/root/cpu/cpufreq/interactive/min_sample_time
-    chmod 0660 /sys/devices/root/cpu/cpufreq/interactive/min_sample_time
-    chown root root /sys/devices/root/cpu/cpufreq/interactive/hispeed_freq
-    chmod 0660 /sys/devices/root/cpu/cpufreq/interactive/hispeed_freq
-    chown root root /sys/devices/root/cpu/cpufreq/interactive/target_loads
-    chmod 0660 /sys/devices/root/cpu/cpufreq/interactive/target_loads
-    chown root root /sys/devices/root/cpu/cpufreq/interactive/go_hispeed_load
-    chmod 0660 /sys/devices/root/cpu/cpufreq/interactive/go_hispeed_load
-    chown root root /sys/devices/root/cpu/cpufreq/interactive/above_hispeed_delay
-    chmod 0660 /sys/devices/root/cpu/cpufreq/interactive/above_hispeed_delay
-    chown root root /sys/devices/root/cpu/cpufreq/interactive/boost
-    chmod 0660 /sys/devices/root/cpu/cpufreq/interactive/boost
-    chown root root /sys/devices/root/cpu/cpufreq/interactive/boostpulse
-    chown root root /sys/devices/root/cpu/cpufreq/interactive/input_boost
-    chmod 0660 /sys/devices/root/cpu/cpufreq/interactive/input_boost
-    chown root root /sys/devices/root/cpu/cpufreq/interactive/boostpulse_duration
-    chmod 0660 /sys/devices/root/cpu/cpufreq/interactive/boostpulse_duration
-    chown root root /sys/devices/root/cpu/cpufreq/interactive/io_is_busy
-    chmod 0660 /sys/devices/root/cpu/cpufreq/interactive/io_is_busy
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+    chmod 0644 /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/timer_slack
+    chmod 0644 /sys/devices/system/cpu/cpufreq/interactive/timer_slack
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+    chmod 0644 /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+    chmod 0644 /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/target_loads
+    chmod 0644 /sys/devices/system/cpu/cpufreq/interactive/target_loads
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+    chmod 0644 /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+    chmod 0644 /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/boost
+    chmod 0644 /sys/devices/system/cpu/cpufreq/interactive/boost
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/boostpulse
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/input_boost
+    chmod 0644 /sys/devices/system/cpu/cpufreq/interactive/input_boost
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
+    chmod 0644 /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
+    chmod 0644 /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
 
         # online CPU0
         echo 1 > /sys/devices/system/cpu/cpu0/online
 	# configure governor settings for little cluster
 	echo "interactive" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+	chown root root /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load
+	chown root root /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif
+	chown root root /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
+    chown root root /sys/devices/system/cpu/cpu0/cpufreq/interactive/boostpulse_duration
+	chown root root /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load
+	chown root root /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate
+	chown root root /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq
+	chown root root /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy
+	chown root root /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
+	chown root root /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time
+	chown root root /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis
+	chown root root /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+	chown root root /sys/devices/system/cpu/cpu0/cpufreq/interactive/ignore_hispeed_on_notif
     chmod 0644 /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load
 	chmod 0644 /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif
 	chmod 0644 /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
@@ -135,6 +148,20 @@ case "$target" in
         # online CPU4
         echo 1 > /sys/devices/system/cpu/cpu4/online
 	# configure governor settings for big cluster
+	chown root root /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
+    chown root root /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load
+	chown root root /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_migration_notif
+	chown root root /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay
+    chown root root /sys/devices/system/cpu/cpu4/cpufreq/interactive/boostpulse_duration
+	chown root root /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load
+	chown root root /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate
+	chown root root /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq
+	chown root root /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy
+	chown root root /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads
+	chown root root /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time
+	chown root root /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis
+	chown root root /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
+	chown root root /sys/devices/system/cpu/cpu4/cpufreq/interactive/ignore_hispeed_on_notif
 	chmod 0644 /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
     chmod 0644 /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load
 	chmod 0644 /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_migration_notif
@@ -187,6 +214,31 @@ case "$target" in
         echo 0 > /sys/module/cpu_boost/parameters/input_boost_ms
         echo "0:0 1:0 2:0 3:0 4:2208000 5:0 6:0 7:0" > /sys/module/cpu_boost/parameters/powerkey_input_boost_freq
         echo 400 > /sys/module/cpu_boost/parameters/powerkey_input_boost_ms
+
+    # from init.rc in xiaomi mi 6
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+    chmod 0444 /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/timer_slack
+    chmod 0444 /sys/devices/system/cpu/cpufreq/interactive/timer_slack
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+    chmod 0444 /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+    chmod 0444 /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/target_loads
+    chmod 0444 /sys/devices/system/cpu/cpufreq/interactive/target_loads
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+    chmod 0444 /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+    chmod 0444 /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/boost
+    chmod 0444 /sys/devices/system/cpu/cpufreq/interactive/boost
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/boostpulse
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/input_boost
+    chmod 0444 /sys/devices/system/cpu/cpufreq/interactive/input_boost
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
+    chmod 0444 /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
+    chown root root /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
+    chmod 0444 /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
 
     # from init.rc in xiaomi mi 6 for recovery
     # chown system system /sys/devices/system/cpu/cpufreq/interactive/timer_rate
