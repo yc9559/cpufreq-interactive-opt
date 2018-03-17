@@ -1,5 +1,5 @@
 import random
-from interactive import *
+from conf import *
 
 def cxSimulatedBinaryBoundedINT(ind1, ind2, eta):
     """Executes a simulated binary crossover that modify in-place the input
@@ -24,18 +24,6 @@ def cxSimulatedBinaryBoundedINT(ind1, ind2, eta):
        This implementation is similar to the one implemented in the 
        original NSGA-II C code presented by Deb.
     """
-    low = zip(  above_i, above_i, above_i, above_i, above_i, 
-                above_i, above_i, above_i, above_i, above_i, 
-                boostpulse_i, go_i, hispeed_i, min_i, 
-                loads_i, loads_i, loads_i, loads_i, loads_i, 
-                loads_i, loads_i, loads_i, loads_i, loads_i
-                )[0]
-    up = zip(   above_i, above_i, above_i, above_i, above_i, 
-                above_i, above_i, above_i, above_i, above_i, 
-                boostpulse_i, go_i, hispeed_i, min_i, 
-                loads_i, loads_i, loads_i, loads_i, loads_i, 
-                loads_i, loads_i, loads_i, loads_i, loads_i
-                )[1]
 
     size = min(len(ind1), len(ind2))
     # if not isinstance(low, Sequence):
@@ -53,7 +41,7 @@ def cxSimulatedBinaryBoundedINT(ind1, ind2, eta):
             # floating point arithmetic in Python is safer
             # if abs(ind1[i] - ind2[i]) > 1e-14:
             if abs(ind1[i] - ind2[i]) > 0:
-                x1_i =  min(ind1[i], ind2[i])
+                x1_i = min(ind1[i], ind2[i])
                 x2_i = max(ind1[i], ind2[i])
                 x1 = float(x1_i)
                 x2 = float(x2_i)
@@ -78,8 +66,8 @@ def cxSimulatedBinaryBoundedINT(ind1, ind2, eta):
                 
                 c1 = min(max(c1, xl), xu)
                 c2 = min(max(c2, xl), xu)
-                c1_i = int(c1)
-                c2_i = int(c2)
+                c1_i = int(round(c1))
+                c2_i = int(round(c2))
                 
                 if random.random() <= 0.5:
                     ind1[i] = c2_i
@@ -113,18 +101,6 @@ def mutPolynomialBoundedINT(individual, eta, indpb):
     #     up = repeat(up, size)
     # elif len(up) < size:
     #     raise IndexError("up must be at least the size of individual: %d < %d" % (len(up), size))
-    low = zip(  above_i, above_i, above_i, above_i, above_i, 
-                above_i, above_i, above_i, above_i, above_i, 
-                boostpulse_i, go_i, hispeed_i, min_i, 
-                loads_i, loads_i, loads_i, loads_i, loads_i, 
-                loads_i, loads_i, loads_i, loads_i, loads_i
-                )[0]
-    up = zip(   above_i, above_i, above_i, above_i, above_i, 
-                above_i, above_i, above_i, above_i, above_i, 
-                boostpulse_i, go_i, hispeed_i, min_i, 
-                loads_i, loads_i, loads_i, loads_i, loads_i, 
-                loads_i, loads_i, loads_i, loads_i, loads_i
-                )[1]
     
     for i, xl, xu in zip(range(size), low, up):
         if random.random() <= indpb:
@@ -146,6 +122,6 @@ def mutPolynomialBoundedINT(individual, eta, indpb):
 
             x = x + delta_q * (xu - xl)
             x = min(max(x, xl), xu)
-            x_i = int(x)
+            x_i = int(round(x))
             individual[i] = x_i
     return individual,
