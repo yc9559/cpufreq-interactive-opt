@@ -1,0 +1,192 @@
+=== Project WIPE ===
+Workload-based Interactive Parameter Explorer
+20171202 费电
+
+【 目录 】
+高通 820/821, 835 专用
+通用 A53 16/14/10nm, 适用于 625/630/660/950/960/7420/8890/8895 小核心
+通用 A53 28/20nm, 适用于 652/650/653/x20 小核心
+
+【 警告 】
+仅供酷安平台交流，勿作商业用途，禁止转载和内嵌
+配置生成器版本不同，不可横向比较分数
+酷安ID：@yc9559
+
+【 这一版的工作 】
+有括号的参数，你知道怎么处理。
+调整了评分函数子项，但是我认为还是不够好。
+接下来深造一波，带上数学统计再回来。
+多维参数的稀疏性有待解决。
+
+【 可选 】
+启用Touch Boost，设定为50ms，小核心为hispeed_freq，大核心为0
+如果你的内核调教不好使，提供EX Kernel Manager 2.95
+https://github.com/yc9559/cpufreq-interactive-opt/raw/master/EX%2BKernel%2BManager-2.95P.apk
+
+【 致谢 】
+少数积极测试的酷安网友
+@ℳ๓叶落情殇 提供了821和835的功耗模型
+@水瓶 提供了8895 M2的功耗模型
+
+======
+高通 820/821 专用
+big/LITTLE集群
+卡顿评分：68.32
+功耗模型：S821 + 400mw基础功耗	
+相对续航时间（EAS为100%）：84.96
+
+above_hispeed_delay:
+(19000 1585000:159000 1785000:99000)
+boostpulse_duration:
+19000
+go_hispeed:
+99
+hispeed_freq:
+1500000(或选择不小于它的值)
+min_sampling_time:
+19000
+target_loads:
+(33 400000:3 500000:54 600000:31 700000:61 800000:82 900000:72 1000000:64 1085000:76 1185000:94 1285000:68 1385000:98 1485000:93 1585000:95 1685000:97)
+timer_rate:
+20000
+timer_slack：
+80000
+enable_prediction: 
+0
+io_is_busy: 
+0
+ignore_hispeed_on_notif: 
+0
+use_sched_load:
+1
+use_migration_notif:
+1
+========
+高通 835 专用
+big集群
+卡顿评分：65.89
+功耗模型：S835 A73 + 400mw基础功耗	
+相对续航时间（EAS为100%）：84.90
+
+above_hispeed_delay:
+(99000 1985000:199000)
+boostpulse_duration:
+19000
+go_hispeed:
+98
+hispeed_freq:
+1600000(或选择不小于它的值)
+min_sampling_time:
+19000
+target_loads:
+(61 400000:15 500000:34 600000:49 700000:83 800000:55 900000:73 1000000:67 1085000:93 1185000:72 1285000:94 1385000:83 1485000:84 1585000:99)
+timer_rate:
+20000
+timer_slack：
+80000
+enable_prediction: 
+0
+io_is_busy: 
+0
+ignore_hispeed_on_notif: 
+0
+use_sched_load:
+1
+use_migration_notif:
+1
+
+LITTLE集群
+卡顿评分：60.64
+功耗模型：835 A53 + 400mw基础功耗	
+相对续航时间（EAS为100%）：88.06
+
+above_hispeed_delay:
+(19000 1685000:159000 1885000:59000)
+boostpulse_duration:
+19000
+go_hispeed:
+99
+hispeed_freq:
+1600000(或选择不小于它的值)
+min_sampling_time:
+19000
+target_loads:
+(1 400000:58 500000:51 600000:39 700000:37 800000:68 900000:47 1000000:78 1085000:61 1185000:88 1285000:67 1385000:73 1485000:88 1585000:92 1685000:99)
+timer_rate:
+20000
+timer_slack：
+80000
+enable_prediction: 
+0
+io_is_busy: 
+0
+ignore_hispeed_on_notif: 
+0
+use_sched_load:
+1
+use_migration_notif:
+1
+========
+通用 A53 16/14/10nm
+卡顿评分：60.64
+功耗模型：835 A53 + 400mw基础功耗	
+相对续航时间（EAS为100%）：88.06
+
+above_hispeed_delay:
+(19000 1685000:159000 1885000:59000)
+boostpulse_duration:
+19000
+go_hispeed:
+99
+hispeed_freq:
+1600000(或选择不小于它的值)
+min_sampling_time:
+19000
+target_loads:
+(1 400000:58 500000:51 600000:39 700000:37 800000:68 900000:47 1000000:78 1085000:61 1185000:88 1285000:67 1385000:73 1485000:88 1585000:92 1685000:99)
+timer_rate:
+20000
+timer_slack：
+80000
+enable_prediction: 
+0
+io_is_busy: 
+0
+ignore_hispeed_on_notif: 
+0
+use_sched_load:
+1
+use_migration_notif:
+1
+========
+通用 A53 28/20nm
+卡顿评分：69.13
+功耗模型：模拟 A53 28nm hpm + 400mw基础功耗	
+相对续航时间（EAS为100%）：92.28
+
+above_hispeed_delay:
+(19000 1485000:59000 1585000:99000)
+boostpulse_duration:
+39000
+go_hispeed:
+99
+hispeed_freq:
+1200000(或选择不小于它的值)
+min_sampling_time:
+19000
+target_loads:
+(33 500000:23 600000:22 700000:71 800000:32 900000:84 1000000:58 1085000:76 1185000:99 1285000:84 1385000:96 1485000:65 1585000:98)
+timer_rate:
+20000
+timer_slack：
+80000
+enable_prediction: 
+0
+io_is_busy: 
+1
+ignore_hispeed_on_notif: 
+0
+use_sched_load:
+1
+use_migration_notif:
+1
