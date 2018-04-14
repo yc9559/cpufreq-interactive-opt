@@ -1,0 +1,55 @@
+#!/system/bin/sh
+# Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
+# Author: yc9559
+# Generated at: Sat Apr 14 16:08:23 2018
+setenforce 0
+action=$1
+
+# Perfd
+# ref: https://forum.xda-developers.com/showpost.php?p=68703199&postcount=4976
+perfd_running=$(getprop "init.svc.perfd")
+if [ "$perfd_running" = "running" ]; then
+	# Stop perfd while tuning parameters
+	stop perfd
+fi
+
+# set min & max frequency
+echo 480000 > /sys/devices/system/cpu/cpufreq/scaling_min_freq
+
+# shared interactive parameters
+# echo 20000 > /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+echo 180000 > /sys/devices/system/cpu/cpufreq/interactive/timer_slack
+echo 0 > /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
+
+if [ "$action" = "powersave" ]; then
+	echo "18000 1280000:58000 1380000:18000 1580000:78000" > /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+	echo 1180000 > /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+	echo 95 > /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+	echo 18000 > /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
+	echo "99 580000:45 880000:8 980000:51 1080000:76 1280000:54 1380000:80 1480000:87 1580000:99" > /sys/devices/system/cpu/cpufreq/interactive/target_loads
+	echo 18000 > /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+fi
+
+if [ "$action" = "balance" ]; then
+	echo "18000 1280000:58000 1380000:18000 1580000:78000" > /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+	echo 1180000 > /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+	echo 99 > /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+	echo 18000 > /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
+	echo "98 580000:44 680000:48 780000:18 880000:5 980000:22 1080000:71 1180000:82 1280000:53 1380000:77 1480000:93 1580000:99" > /sys/devices/system/cpu/cpufreq/interactive/target_loads
+	echo 18000 > /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+fi
+
+if [ "$action" = "performance" ]; then
+	echo "18000 1280000:58000 1380000:18000 1580000:78000" > /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+	echo 1180000 > /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+	echo 98 > /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+	echo 18000 > /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
+	echo "98 580000:40 880000:11 1080000:28 1180000:69 1280000:51 1380000:69 1480000:62 1580000:82 1680000:99" > /sys/devices/system/cpu/cpufreq/interactive/target_loads
+	echo 18000 > /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+fi
+
+if [ "$action" = "fast" ]; then
+	# nothing
+fi
+
+exit 0
