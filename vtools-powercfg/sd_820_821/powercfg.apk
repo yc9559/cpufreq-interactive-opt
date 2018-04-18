@@ -1,109 +1,128 @@
 #!/system/bin/sh
 # Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
 # Author: yc9559
-# Generated at: Wed Apr 18 10:42:49 2018
+# Generated at: Wed Apr 18 14:18:15 2018
+
 setenforce 0
 action=$1
 
-# Perfd
-# ref: https://forum.xda-developers.com/showpost.php?p=68703199&postcount=4976
-perfd_running=$(getprop "init.svc.perfd")
-if [ "$perfd_running" = "running" ]; then
-	# Stop perfd while tuning parameters
-	stop perfd
-fi
+# $1:value $2:file path
+function set_value() {
+	chown 0.0 $2
+	chmod 0666 $2
+	echo $1 > $2
+	chmod 0444 $2
+}
 
-# HMP
-echo 90 > /proc/sys/kernel/sched_spill_load
-if [ -f /proc/sys/kernel/sched_boost]; then
-	echo 0 > /proc/sys/kernel/sched_boost
-fi
-if [ -f /proc/sys/kernel/sched_prefer_sync_wakee_to_waker]; then
-	echo 1 > /proc/sys/kernel/sched_prefer_sync_wakee_to_waker
-fi
-if [ -f /proc/sys/kernel/sched_init_task_load]; then
-	echo 40 > /proc/sys/kernel/sched_init_task_load
-fi
-
-# HMP IN SMP STYLE for msm8996
-echo 30 > /proc/sys/kernel/sched_downmigrate
-echo 60 > /proc/sys/kernel/sched_upmigrate
-
-# THERMAL CONTROL
-echo N > /sys/module/msm_thermal/parameters/enabled
-
-# INPUT BOOST
-echo 50 > /sys/module/cpu_boost/parameters/input_boost_ms
+# $1:cpu0 $2:timer_rate $3:value
+function set_param() {
+	echo $3 > /sys/devices/system/cpu/$1/cpufreq/interactive/$2
+}
 
 # disable thermal bcl hotplug to switch governor
 echo 0 > /sys/module/msm_thermal/core_control/enabled
 
-# set min & max frequency
-echo 280000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
-echo 1 > /sys/devices/system/cpu/cpu2/online
-echo 280000 > /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
+# RunOnce
+if [ ! -f /project_wipe_runonce ]; then
+	# set flag
+	touch /project_wipe_runonce
 
-# shared interactive parameters
-# echo 20000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate
-# echo 20000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/timer_rate
-echo 180000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_slack
-echo 180000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/timer_slack
-echo 0 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy
-echo 0 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/io_is_busy
-echo 0 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/ignore_hispeed_on_notif
-echo 0 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/ignore_hispeed_on_notif
+	# Perfd, nothing to worry about, if error the script will continue
+	stop perfd
+
+	# HMP
+	set_value 90 /proc/sys/kernel/sched_spill_load
+	set_value 0 /proc/sys/kernel/sched_boost
+	set_value 1 /proc/sys/kernel/sched_prefer_sync_wakee_to_waker
+	set_value 40 /proc/sys/kernel/sched_init_task_load
+
+	# HMP IN SMP STYLE for msm8996
+	set_value 25 /proc/sys/kernel/sched_downmigrate
+	set_value 50 /proc/sys/kernel/sched_upmigrate
+
+	# THERMAL CONTROL
+	echo N > /sys/module/msm_thermal/parameters/enabled
+
+	# INPUT BOOST
+	echo 50 > /sys/module/cpu_boost/parameters/input_boost_ms
+
+	# set min & max frequency
+	set_value 280000 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+	set_value 1 /sys/devices/system/cpu/cpu2/online
+	set_value 280000 /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
+
+	# shared interactive parameters
+	# set_param cpu0 timer_rate 20000
+	# set_param cpu2 timer_rate 20000
+	set_param cpu0 timer_slack 180000
+	set_param cpu2 timer_slack 180000
+	set_param cpu0 io_is_busy 0
+	set_param cpu2 io_is_busy 0
+	set_param cpu0 ignore_hispeed_on_notif 0
+	set_param cpu2 ignore_hispeed_on_notif 0
+fi
+
+# set permission for setting interactive parameters
+chown 0.0 /sys/devices/system/cpu/cpu0/cpufreq/interactive/*
+chown 0.0 /sys/devices/system/cpu/cpu2/cpufreq/interactive/*
+chmod 0666 /sys/devices/system/cpu/cpu0/cpufreq/interactive/*
+chmod 0666 /sys/devices/system/cpu/cpu2/cpufreq/interactive/*
 
 if [ "$action" = "powersave" ]; then
 	echo "0:1280000 2:0" > /sys/module/cpu_boost/parameters/input_boost_freq
-	echo "78000" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
-	echo 1280000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq
-	echo 99 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load
-	echo 18000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/boostpulse_duration
-	echo "62 380000:37 480000:76 580000:43 780000:83 880000:76 980000:85 1080000:99" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
-	echo 18000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time
-	echo "18000 1280000:58000 1380000:78000 1780000:138000" > /sys/devices/system/cpu/cpu2/cpufreq/interactive/above_hispeed_delay
-	echo 1180000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/hispeed_freq
-	echo 99 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/go_hispeed_load
-	echo 18000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/boostpulse_duration
-	echo "65 380000:33 480000:76 580000:43 780000:90 880000:72 980000:57 1080000:74 1180000:92 1280000:83 1480000:91 1580000:98" > /sys/devices/system/cpu/cpu2/cpufreq/interactive/target_loads
-	echo 18000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/min_sample_time
+	set_param cpu0 above_hispeed_delay "78000 1580000:18000"
+	set_param cpu0 hispeed_freq 1280000
+	set_param cpu0 go_hispeed_load 99
+	set_param cpu0 boostpulse_duration 18000
+	set_param cpu0 target_loads "59 380000:38 480000:75 580000:43 780000:83 880000:76 980000:85 1080000:99"
+	set_param cpu0 min_sample_time 18000
+	set_param cpu2 above_hispeed_delay "18000 1280000:58000 1380000:78000 1780000:138000"
+	set_param cpu2 hispeed_freq 1180000
+	set_param cpu2 go_hispeed_load 97
+	set_param cpu2 boostpulse_duration 18000
+	set_param cpu2 target_loads "65 380000:33 480000:76 580000:43 780000:90 880000:71 980000:57 1080000:74 1180000:92 1280000:81 1480000:91 1580000:99"
+	set_param cpu2 min_sample_time 18000
 fi
 
 if [ "$action" = "balance" ]; then
 	echo "0:1280000 2:0" > /sys/module/cpu_boost/parameters/input_boost_freq
-	echo "78000" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
-	echo 1280000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq
-	echo 99 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load
-	echo 18000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/boostpulse_duration
-	echo "61 380000:38 480000:75 580000:43 780000:85 880000:62 980000:89 1080000:67 1180000:99" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
-	echo 18000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time
-	echo "18000 1380000:78000 1780000:138000" > /sys/devices/system/cpu/cpu2/cpufreq/interactive/above_hispeed_delay
-	echo 1280000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/hispeed_freq
-	echo 98 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/go_hispeed_load
-	echo 18000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/boostpulse_duration
-	echo "33 380000:15 480000:76 580000:42 780000:83 880000:73 980000:77 1080000:51 1180000:99 1280000:84 1480000:92 1580000:99" > /sys/devices/system/cpu/cpu2/cpufreq/interactive/target_loads
-	echo 18000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/min_sample_time
+	set_param cpu0 above_hispeed_delay "78000 1580000:58000"
+	set_param cpu0 hispeed_freq 1280000
+	set_param cpu0 go_hispeed_load 97
+	set_param cpu0 boostpulse_duration 18000
+	set_param cpu0 target_loads "59 380000:38 480000:76 580000:43 780000:86 880000:62 980000:78 1180000:99"
+	set_param cpu0 min_sample_time 18000
+	set_param cpu2 above_hispeed_delay "18000 1280000:38000 1380000:78000 1780000:138000"
+	set_param cpu2 hispeed_freq 1180000
+	set_param cpu2 go_hispeed_load 99
+	set_param cpu2 boostpulse_duration 18000
+	set_param cpu2 target_loads "33 480000:76 580000:43 780000:83 880000:70 980000:57 1080000:74 1180000:91 1280000:83 1380000:74 1480000:91 1580000:98"
+	set_param cpu2 min_sample_time 18000
 fi
 
 if [ "$action" = "performance" ]; then
 	echo "0:1380000 2:0" > /sys/module/cpu_boost/parameters/input_boost_freq
-	echo "78000 1580000:58000" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
-	echo 1380000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq
-	echo 99 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load
-	echo 18000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/boostpulse_duration
-	echo "1 380000:24 480000:76 580000:40 780000:87 880000:52 980000:82 1080000:60 1180000:99" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
-	echo 18000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time
-	echo "78000" > /sys/devices/system/cpu/cpu2/cpufreq/interactive/above_hispeed_delay
-	echo 1580000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/hispeed_freq
-	echo 99 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/go_hispeed_load
-	echo 18000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/boostpulse_duration
-	echo "1 380000:24 480000:76 580000:43 780000:87 880000:61 980000:78 1080000:53 1180000:97 1280000:88 1380000:95 1480000:99" > /sys/devices/system/cpu/cpu2/cpufreq/interactive/target_loads
-	echo 18000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/min_sample_time
+	set_param cpu0 above_hispeed_delay "78000 1580000:58000"
+	set_param cpu0 hispeed_freq 1380000
+	set_param cpu0 go_hispeed_load 99
+	set_param cpu0 boostpulse_duration 18000
+	set_param cpu0 target_loads "1 380000:24 480000:75 580000:40 780000:87 880000:52 980000:82 1080000:60 1180000:99"
+	set_param cpu0 min_sample_time 18000
+	set_param cpu2 above_hispeed_delay "78000"
+	set_param cpu2 hispeed_freq 1580000
+	set_param cpu2 go_hispeed_load 99
+	set_param cpu2 boostpulse_duration 18000
+	set_param cpu2 target_loads "1 380000:22 480000:76 580000:43 780000:87 880000:57 980000:82 1080000:53 1180000:97 1280000:76 1380000:95 1480000:99"
+	set_param cpu2 min_sample_time 18000
 fi
 
 if [ "$action" = "fast" ]; then
 	# nothing
 fi
+
+# set permission to avoid being modified
+chmod 0444 /sys/devices/system/cpu/cpu0/cpufreq/interactive/*
+chmod 0444 /sys/devices/system/cpu/cpu2/cpufreq/interactive/*
 
 # re-enable thermal bcl hotplug to switch governor
 echo 1 > /sys/module/msm_thermal/core_control/enabled
