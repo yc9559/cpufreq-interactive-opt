@@ -1,7 +1,7 @@
 #!/system/bin/sh
 # Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
 # Author: yc9559
-# Generated at: Tue Apr 17 00:21:02 2018
+# Generated at: Wed Apr 18 10:42:49 2018
 setenforce 0
 action=$1
 
@@ -26,7 +26,7 @@ if [ -f /proc/sys/kernel/sched_init_task_load]; then
 fi
 
 # HMP IN SMP STYLE for msm8996
-echo 40 > /proc/sys/kernel/sched_downmigrate
+echo 30 > /proc/sys/kernel/sched_downmigrate
 echo 60 > /proc/sys/kernel/sched_upmigrate
 
 # THERMAL CONTROL
@@ -54,50 +54,50 @@ echo 0 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/ignore_hispeed_on_noti
 echo 0 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/ignore_hispeed_on_notif
 
 if [ "$action" = "powersave" ]; then
-	echo "0:1280000 4:0" > /sys/module/cpu_boost/parameters/input_boost_freq
-	echo "78000 1580000:58000" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
+	echo "0:1280000 2:0" > /sys/module/cpu_boost/parameters/input_boost_freq
+	echo "78000" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
 	echo 1280000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq
 	echo 99 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load
 	echo 18000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/boostpulse_duration
-	echo "59 380000:38 480000:75 580000:43 780000:83 880000:75 980000:85 1080000:99" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
+	echo "62 380000:37 480000:76 580000:43 780000:83 880000:76 980000:85 1080000:99" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
 	echo 18000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time
 	echo "18000 1280000:58000 1380000:78000 1780000:138000" > /sys/devices/system/cpu/cpu2/cpufreq/interactive/above_hispeed_delay
 	echo 1180000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/hispeed_freq
 	echo 99 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/go_hispeed_load
 	echo 18000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/boostpulse_duration
-	echo "60 380000:38 480000:76 580000:43 780000:86 880000:62 980000:77 1180000:91 1280000:83 1480000:91 1580000:98" > /sys/devices/system/cpu/cpu2/cpufreq/interactive/target_loads
+	echo "65 380000:33 480000:76 580000:43 780000:90 880000:72 980000:57 1080000:74 1180000:92 1280000:83 1480000:91 1580000:98" > /sys/devices/system/cpu/cpu2/cpufreq/interactive/target_loads
 	echo 18000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/min_sample_time
 fi
 
 if [ "$action" = "balance" ]; then
-	echo "0:1280000 4:0" > /sys/module/cpu_boost/parameters/input_boost_freq
+	echo "0:1280000 2:0" > /sys/module/cpu_boost/parameters/input_boost_freq
 	echo "78000" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
 	echo 1280000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq
-	echo 97 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load
+	echo 99 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load
 	echo 18000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/boostpulse_duration
-	echo "59 380000:38 480000:75 580000:43 780000:86 880000:62 980000:78 1180000:99" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
+	echo "61 380000:38 480000:75 580000:43 780000:85 880000:62 980000:89 1080000:67 1180000:99" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
 	echo 18000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time
-	echo "18000 1280000:38000 1480000:78000 1780000:138000" > /sys/devices/system/cpu/cpu2/cpufreq/interactive/above_hispeed_delay
-	echo 1180000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/hispeed_freq
-	echo 99 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/go_hispeed_load
+	echo "18000 1380000:78000 1780000:138000" > /sys/devices/system/cpu/cpu2/cpufreq/interactive/above_hispeed_delay
+	echo 1280000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/hispeed_freq
+	echo 98 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/go_hispeed_load
 	echo 18000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/boostpulse_duration
-	echo "33 380000:17 480000:76 580000:42 780000:83 880000:73 980000:77 1080000:51 1180000:97 1280000:68 1380000:84 1480000:92 1580000:98" > /sys/devices/system/cpu/cpu2/cpufreq/interactive/target_loads
+	echo "33 380000:15 480000:76 580000:42 780000:83 880000:73 980000:77 1080000:51 1180000:99 1280000:84 1480000:92 1580000:99" > /sys/devices/system/cpu/cpu2/cpufreq/interactive/target_loads
 	echo 18000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/min_sample_time
 fi
 
 if [ "$action" = "performance" ]; then
-	echo "0:1380000 4:0" > /sys/module/cpu_boost/parameters/input_boost_freq
-	echo "78000 1580000:38000" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
+	echo "0:1380000 2:0" > /sys/module/cpu_boost/parameters/input_boost_freq
+	echo "78000 1580000:58000" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
 	echo 1380000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq
-	echo 97 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load
+	echo 99 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load
 	echo 18000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/boostpulse_duration
-	echo "1 480000:76 580000:19 780000:84 880000:61 980000:78 1080000:50 1180000:96" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
+	echo "1 380000:24 480000:76 580000:40 780000:87 880000:52 980000:82 1080000:60 1180000:99" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
 	echo 18000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time
 	echo "78000" > /sys/devices/system/cpu/cpu2/cpufreq/interactive/above_hispeed_delay
 	echo 1580000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/hispeed_freq
-	echo 97 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/go_hispeed_load
+	echo 99 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/go_hispeed_load
 	echo 18000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/boostpulse_duration
-	echo "1 480000:75 580000:17 680000:29 780000:83 880000:57 980000:78 1080000:54 1180000:93 1280000:73 1380000:69 1480000:99" > /sys/devices/system/cpu/cpu2/cpufreq/interactive/target_loads
+	echo "1 380000:24 480000:76 580000:43 780000:87 880000:61 980000:78 1080000:53 1180000:97 1280000:88 1380000:95 1480000:99" > /sys/devices/system/cpu/cpu2/cpufreq/interactive/target_loads
 	echo 18000 > /sys/devices/system/cpu/cpu2/cpufreq/interactive/min_sample_time
 fi
 
