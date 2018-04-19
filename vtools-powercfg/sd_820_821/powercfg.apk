@@ -1,7 +1,7 @@
 #!/system/bin/sh
 # Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
 # Author: yc9559
-# Generated at: Wed Apr 18 18:12:19 2018
+# Generated at: Thu Apr 19 00:33:26 2018
 
 setenforce 0
 action=$1
@@ -40,7 +40,7 @@ if [ ! -f /project_wipe_runonce ]; then
 	set_value 40 /proc/sys/kernel/sched_init_task_load
 
 	# HMP IN SMP STYLE for msm8996
-	set_value 25 /proc/sys/kernel/sched_downmigrate
+	set_value 30 /proc/sys/kernel/sched_downmigrate
 	set_value 50 /proc/sys/kernel/sched_upmigrate
 
 	# THERMAL CONTROL
@@ -75,15 +75,15 @@ if [ "$action" = "powersave" ]; then
 	echo "0:1280000 2:0" > /sys/module/cpu_boost/parameters/input_boost_freq
 	set_param cpu0 above_hispeed_delay "78000 1580000:58000"
 	set_param cpu0 hispeed_freq 1280000
-	set_param cpu0 go_hispeed_load 99
+	set_param cpu0 go_hispeed_load 97
 	set_param cpu0 boostpulse_duration 18000
-	set_param cpu0 target_loads "62 380000:38 480000:75 580000:42 780000:87 880000:56 980000:83 1080000:99"
+	set_param cpu0 target_loads "59 380000:38 480000:76 580000:42 780000:86 880000:61 980000:85 1080000:99"
 	set_param cpu0 min_sample_time 18000
-	set_param cpu2 above_hispeed_delay "18000 1280000:78000 1780000:138000"
+	set_param cpu2 above_hispeed_delay "18000 1280000:38000 1380000:78000 1780000:138000"
 	set_param cpu2 hispeed_freq 1180000
-	set_param cpu2 go_hispeed_load 98
+	set_param cpu2 go_hispeed_load 99
 	set_param cpu2 boostpulse_duration 18000
-	set_param cpu2 target_loads "60 380000:39 480000:76 580000:42 780000:87 880000:62 980000:82 1080000:73 1180000:91 1280000:82 1480000:90 1580000:98"
+	set_param cpu2 target_loads "61 380000:38 480000:76 580000:42 780000:86 880000:61 1080000:99 1180000:90 1280000:81 1480000:92 1580000:99"
 	set_param cpu2 min_sample_time 18000
 fi
 
@@ -91,31 +91,31 @@ if [ "$action" = "balance" ]; then
 	echo "0:1280000 2:0" > /sys/module/cpu_boost/parameters/input_boost_freq
 	set_param cpu0 above_hispeed_delay "78000 1580000:38000"
 	set_param cpu0 hispeed_freq 1280000
-	set_param cpu0 go_hispeed_load 97
+	set_param cpu0 go_hispeed_load 99
 	set_param cpu0 boostpulse_duration 18000
-	set_param cpu0 target_loads "59 380000:38 480000:76 580000:43 780000:86 880000:62 980000:78 1180000:99"
+	set_param cpu0 target_loads "64 380000:38 480000:74 580000:42 780000:87 880000:61 980000:86 1080000:67 1180000:99"
 	set_param cpu0 min_sample_time 18000
-	set_param cpu2 above_hispeed_delay "18000 1380000:78000 1780000:138000"
-	set_param cpu2 hispeed_freq 1280000
-	set_param cpu2 go_hispeed_load 99
+	set_param cpu2 above_hispeed_delay "18000 1280000:38000 1380000:78000 1780000:138000"
+	set_param cpu2 hispeed_freq 1180000
+	set_param cpu2 go_hispeed_load 97
 	set_param cpu2 boostpulse_duration 18000
-	set_param cpu2 target_loads "60 380000:39 480000:76 580000:42 780000:87 880000:61 980000:82 1080000:55 1180000:97 1280000:82 1480000:92 1580000:98"
+	set_param cpu2 target_loads "33 380000:24 480000:76 580000:42 780000:83 880000:73 980000:77 1080000:51 1180000:97 1280000:68 1380000:84 1480000:92 1580000:99"
 	set_param cpu2 min_sample_time 18000
 fi
 
 if [ "$action" = "performance" ]; then
 	echo "0:1380000 2:0" > /sys/module/cpu_boost/parameters/input_boost_freq
-	set_param cpu0 above_hispeed_delay "78000 1580000:58000"
+	set_param cpu0 above_hispeed_delay "78000"
 	set_param cpu0 hispeed_freq 1380000
-	set_param cpu0 go_hispeed_load 97
+	set_param cpu0 go_hispeed_load 99
 	set_param cpu0 boostpulse_duration 18000
-	set_param cpu0 target_loads "1 380000:24 480000:75 580000:40 780000:87 880000:57 980000:82 1080000:60 1180000:98"
+	set_param cpu0 target_loads "1 380000:21 480000:76 580000:50 680000:30 780000:90 880000:52 980000:80 1080000:54 1280000:99"
 	set_param cpu0 min_sample_time 18000
-	set_param cpu2 above_hispeed_delay "18000 1580000:78000"
-	set_param cpu2 hispeed_freq 1480000
-	set_param cpu2 go_hispeed_load 99
+	set_param cpu2 above_hispeed_delay "78000 1780000:38000"
+	set_param cpu2 hispeed_freq 1580000
+	set_param cpu2 go_hispeed_load 98
 	set_param cpu2 boostpulse_duration 18000
-	set_param cpu2 target_loads "1 380000:23 480000:76 580000:43 780000:87 880000:57 980000:62 1080000:74 1180000:98 1280000:70 1380000:74 1480000:93 1580000:97"
+	set_param cpu2 target_loads "1 380000:21 480000:76 580000:48 680000:30 780000:92 880000:46 980000:62 1080000:45 1180000:68 1280000:73 1480000:99"
 	set_param cpu2 min_sample_time 18000
 fi
 
