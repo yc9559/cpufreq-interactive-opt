@@ -1,0 +1,74 @@
+#!/system/bin/sh
+# Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
+# Author: yc9559
+# Generated at: Thu Apr 19 12:40:30 2018
+
+setenforce 0
+action=$1
+
+# $1:value $2:file path
+function set_value() {
+	chown 0.0 $2
+	chmod 0666 $2
+	echo $1 > $2
+	chmod 0444 $2
+}
+
+# $1:cpu0 $2:timer_rate $3:value
+function set_param() {
+	echo $3 > /sys/devices/system/cpu/cpufreq/interactive/$2
+}
+
+# RunOnce
+if [ ! -f /project_wipe_runonce ]; then
+	# set flag
+	touch /project_wipe_runonce
+
+	# set min & max frequency
+	set_value 480000 /sys/devices/system/cpu/cpufreq/scaling_min_freq
+
+	# shared interactive parameters
+	set_param cpu0 timer_rate 20000
+	set_param cpu0 timer_slack 180000
+	set_param cpu0 io_is_busy 0
+fi
+
+# set permission for setting interactive parameters
+chown 0.0 /sys/devices/system/cpu/cpufreq/interactive/*
+chmod 0666 /sys/devices/system/cpu/cpufreq/interactive/*
+
+if [ "$action" = "powersave" ]; then
+	set_param cpu0 above_hispeed_delay "78000"
+	set_param cpu0 hispeed_freq 1480000
+	set_param cpu0 go_hispeed_load 99
+	set_param cpu0 boostpulse_duration 18000
+	set_param cpu0 target_loads "67 580000:40 680000:88 780000:42 980000:52 1080000:92 1180000:99 1280000:69 1380000:88 1480000:93 1580000:99"
+	set_param cpu0 min_sample_time 18000
+fi
+
+if [ "$action" = "balance" ]; then
+	set_param cpu0 above_hispeed_delay "58000 1580000:78000"
+	set_param cpu0 hispeed_freq 1480000
+	set_param cpu0 go_hispeed_load 99
+	set_param cpu0 boostpulse_duration 18000
+	set_param cpu0 target_loads "67 580000:40 680000:88 780000:40 980000:52 1080000:92 1280000:70 1480000:93 1580000:98"
+	set_param cpu0 min_sample_time 18000
+fi
+
+if [ "$action" = "performance" ]; then
+	set_param cpu0 above_hispeed_delay "18000 1580000:78000"
+	set_param cpu0 hispeed_freq 1480000
+	set_param cpu0 go_hispeed_load 99
+	set_param cpu0 boostpulse_duration 18000
+	set_param cpu0 target_loads "67 580000:48 680000:89 780000:40 1080000:48 1180000:90 1280000:69 1380000:64 1480000:98"
+	set_param cpu0 min_sample_time 18000
+fi
+
+if [ "$action" = "fast" ]; then
+	# nothing
+fi
+
+# set permission to avoid being modified
+chmod 0444 /sys/devices/system/cpu/cpufreq/interactive/*
+
+exit 0

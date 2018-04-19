@@ -1,0 +1,83 @@
+#!/system/bin/sh
+# Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
+# Author: yc9559
+# Generated at: Thu Apr 19 12:50:12 2018
+
+setenforce 0
+action=$1
+
+# $1:value $2:file path
+function set_value() {
+	chown 0.0 $2
+	chmod 0666 $2
+	echo $1 > $2
+	chmod 0444 $2
+}
+
+# $1:cpu0 $2:timer_rate $3:value
+function set_param() {
+	echo $3 > /sys/devices/system/cpu/cpufreq/interactive/$2
+}
+
+# RunOnce
+if [ ! -f /project_wipe_runonce ]; then
+	# set flag
+	touch /project_wipe_runonce
+
+	# CORE CONTROL
+	set_value 60 /proc/hps/down_threshold
+
+	# set min & max frequency
+	set_value 380000 /sys/devices/system/cpu/cpufreq/scaling_min_freq
+
+	# shared interactive parameters
+	set_param cpu0 timer_rate 20000
+	set_param cpu0 timer_slack 180000
+	set_param cpu0 io_is_busy 0
+fi
+
+# set permission for setting interactive parameters
+chown 0.0 /sys/devices/system/cpu/cpufreq/interactive/*
+chmod 0666 /sys/devices/system/cpu/cpufreq/interactive/*
+
+if [ "$action" = "powersave" ]; then
+	set_value 95 /proc/hps/up_threshold
+	set_value 1 /proc/hps/num_base_perf_serv
+	set_param cpu0 above_hispeed_delay "78000"
+	set_param cpu0 hispeed_freq 1480000
+	set_param cpu0 go_hispeed_load 98
+	set_param cpu0 boostpulse_duration 18000
+	set_param cpu0 target_loads "68 1180000:91 1280000:83 1480000:98"
+	set_param cpu0 min_sample_time 18000
+fi
+
+if [ "$action" = "balance" ]; then
+	set_value 85 /proc/hps/up_threshold
+	set_value 2 /proc/hps/num_base_perf_serv
+	set_param cpu0 above_hispeed_delay "78000"
+	set_param cpu0 hispeed_freq 1480000
+	set_param cpu0 go_hispeed_load 99
+	set_param cpu0 boostpulse_duration 18000
+	set_param cpu0 target_loads "70 1180000:66 1280000:85 1480000:97"
+	set_param cpu0 min_sample_time 18000
+fi
+
+if [ "$action" = "performance" ]; then
+	set_value 80 /proc/hps/up_threshold
+	set_value 3 /proc/hps/num_base_perf_serv
+	set_param cpu0 above_hispeed_delay "58000 1580000:78000"
+	set_param cpu0 hispeed_freq 1480000
+	set_param cpu0 go_hispeed_load 93
+	set_param cpu0 boostpulse_duration 38000
+	set_param cpu0 target_loads "61 780000:36 1180000:85 1480000:79 1580000:98"
+	set_param cpu0 min_sample_time 38000
+fi
+
+if [ "$action" = "fast" ]; then
+	# nothing
+fi
+
+# set permission to avoid being modified
+chmod 0444 /sys/devices/system/cpu/cpufreq/interactive/*
+
+exit 0
