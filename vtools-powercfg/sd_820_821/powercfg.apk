@@ -8,7 +8,7 @@ action=$1
 
 # $1:value $2:file path
 function set_value() {
-	if [ ! -f $2 ]; then
+	if [ -f $2 ]; then
 		chown 0.0 $2
 		chmod 0666 $2
 		echo $1 > $2
