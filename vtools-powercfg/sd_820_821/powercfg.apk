@@ -1,17 +1,19 @@
 #!/system/bin/sh
 # Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
 # Author: yc9559
-# Generated at: Thu Apr 19 00:33:26 2018
+# Generated at: Fri Apr 20 12:20:58 2018
 
 setenforce 0
 action=$1
 
 # $1:value $2:file path
 function set_value() {
-	chown 0.0 $2
-	chmod 0666 $2
-	echo $1 > $2
-	chmod 0444 $2
+	if [ ! -f $2 ]; then
+		chown 0.0 $2
+		chmod 0666 $2
+		echo $1 > $2
+		chmod 0444 $2
+	fi
 }
 
 # $1:cpu0 $2:timer_rate $3:value
@@ -41,13 +43,14 @@ if [ ! -f /project_wipe_runonce ]; then
 
 	# HMP IN SMP STYLE for msm8996
 	set_value 30 /proc/sys/kernel/sched_downmigrate
-	set_value 50 /proc/sys/kernel/sched_upmigrate
+	set_value 45 /proc/sys/kernel/sched_upmigrate
 
 	# THERMAL CONTROL
 	echo N > /sys/module/msm_thermal/parameters/enabled
 
 	# INPUT BOOST
-	echo 50 > /sys/module/cpu_boost/parameters/input_boost_ms
+	set_value 50 /sys/module/cpu_boost/parameters/input_boost_ms
+	set_value 0 /sys/module/msm_performance/parameters/touchboost
 
 	# set min & max frequency
 	set_value 280000 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
@@ -61,6 +64,8 @@ if [ ! -f /project_wipe_runonce ]; then
 	set_param cpu2 timer_slack 180000
 	set_param cpu0 io_is_busy 0
 	set_param cpu2 io_is_busy 0
+	set_param cpu0 use_sched_load 1
+	set_param cpu2 use_sched_load 1
 	set_param cpu0 ignore_hispeed_on_notif 0
 	set_param cpu2 ignore_hispeed_on_notif 0
 fi
