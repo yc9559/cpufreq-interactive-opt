@@ -48,7 +48,7 @@ if [ ! -f /project_wipe_runonce ]; then
 
 	set_value 30 /proc/sys/kernel/sched_downmigrate
 	set_value 45 /proc/sys/kernel/sched_upmigrate
-	set_value 800000 /proc/sys/kernel/sched_freq_inc_notify
+	set_value 1500000 /proc/sys/kernel/sched_freq_inc_notify
 
 	set_value 50 /sys/module/cpu_boost/parameters/input_boost_ms
 	set_value 0 /sys/module/msm_performance/parameters/touchboost
