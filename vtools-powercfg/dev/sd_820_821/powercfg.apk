@@ -1,7 +1,7 @@
 #!/system/bin/sh
 # Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
 # Author: yc9559
-# Generated at: Sun Apr 22 21:50:31 2018
+# Generated at: Mon Apr 23 22:15:36 2018
 
 # $1:value $2:file path
 function set_value() {
@@ -33,22 +33,19 @@ chmod 0666 /sys/devices/system/cpu/cpu2/cpufreq/interactive/*
 # RunOnce
 if [ ! -f /project_wipe_runonce ]; then
 	# set flag
-	echo 1 > /project_wipe_runonce
+	touch /project_wipe_runonce
 
 	# Perfd, nothing to worry about, if error the script will continue
 	stop perfd
-	if [ -f /data/system/perfd/default_values ]; then
-		rm /data/system/perfd/default_values
-	fi
 
 	set_value 90 /proc/sys/kernel/sched_spill_load
 	set_value 0 /proc/sys/kernel/sched_boost
 	set_value 1 /proc/sys/kernel/sched_prefer_sync_wakee_to_waker
 	set_value 40 /proc/sys/kernel/sched_init_task_load
+	set_value 2500000 /proc/sys/kernel/sched_freq_inc_notify
 
 	set_value 30 /proc/sys/kernel/sched_downmigrate
 	set_value 45 /proc/sys/kernel/sched_upmigrate
-	set_value 3000000 /proc/sys/kernel/sched_freq_inc_notify
 
 	set_value 50 /sys/module/cpu_boost/parameters/input_boost_ms
 	set_value 0 /sys/module/msm_performance/parameters/touchboost
