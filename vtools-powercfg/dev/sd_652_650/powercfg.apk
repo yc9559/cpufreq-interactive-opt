@@ -42,7 +42,7 @@ if [ ! -f /project_wipe_runonce ]; then
 	set_value 0 /proc/sys/kernel/sched_boost
 	set_value 1 /proc/sys/kernel/sched_prefer_sync_wakee_to_waker
 	set_value 40 /proc/sys/kernel/sched_init_task_load
-	set_value 2500000 /proc/sys/kernel/sched_freq_inc_notify
+	set_value 3000000 /proc/sys/kernel/sched_freq_inc_notify
 
 	set_value 50 /sys/module/cpu_boost/parameters/input_boost_ms
 	set_value 0 /sys/module/msm_performance/parameters/touchboost
