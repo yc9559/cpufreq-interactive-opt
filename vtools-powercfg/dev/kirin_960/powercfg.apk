@@ -1,7 +1,7 @@
 #!/system/bin/sh
 # Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
 # Author: yc9559
-# Generated at: Sun Apr 22 23:22:13 2018
+# Generated at: Tue Apr 24 22:51:24 2018
 
 # $1:value $2:file path
 function set_value() {
@@ -30,7 +30,7 @@ chmod 0666 /sys/devices/system/cpu/cpu4/cpufreq/interactive/*
 # RunOnce
 if [ ! -f /project_wipe_runonce ]; then
 	# set flag
-	echo 1 > /project_wipe_runonce
+	touch /project_wipe_runonce
 
 	set_value 480000 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
 	set_value 880000 /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
