@@ -31,9 +31,6 @@ if [ ! -f /project_wipe_runonce ]; then
 
 	# Perfd, nothing to worry about, if error the script will continue
 	stop perfd
-	if [ -f /data/system/perfd/default_values ]; then
-		rm /data/system/perfd/default_values
-	fi
 
 	set_value [sched_spiluni_load] /proc/sys/kernel/sched_spiluni_load
 	set_value 0 /proc/sys/kernel/sched_boost
@@ -46,7 +43,7 @@ if [ ! -f /project_wipe_runonce ]; then
 	set_value 50 /sys/module/cpu_boost/parameters/input_boost_ms
 	set_value 0 /sys/module/msm_performance/parameters/touchboost
 
-	set_value 580000 /sys/devices/system/cpu/cpufreq/scaling_min_freq
+	set_value 580000 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
 
 	# shared interactive parameters
 	set_param cpu0 timer_rate 20000

@@ -32,7 +32,7 @@ if [ ! -f /project_wipe_runonce ]; then
 	# CORE CONTROL
 	set_value 60 /proc/hps/down_threshold
 
-	set_value 280000 /sys/devices/system/cpu/cpufreq/scaling_min_freq
+	set_value 280000 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
 
 	# shared interactive parameters
 	set_param cpu0 timer_rate 20000

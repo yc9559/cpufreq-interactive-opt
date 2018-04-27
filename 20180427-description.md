@@ -53,8 +53,8 @@ This project aims to solve the problems above by creating automated programs as 
 4. 待机耗电一般在0.5-1.0%/h，耗电过多先检查唤醒锁，使用 Wakelock Detector 或者 3C Toolbox
 5. 本版本推荐使用微工具箱，使用之前确保 EX Kernel Manager 和 Kernel Auditor 不会带来干扰
 6. 微工具箱性能配置文件下载后重命名为`powercfg`，复制到`/data`，最终该文件位置为`/data/powercfg`，权限设置为755
-7. 启动微工具箱，删除系统的温控，启用自动服务，重启设备
-8. 省电->卡顿，均衡->均衡，游戏->费电，极速->空空如也
+7. 启动微工具箱，删除系统的温控，启用并设置自动服务，重启设备，用全新安装的 EX Kernel Manager 检查参数是否生效
+8. 省电->卡顿，均衡->均衡，游戏->费电，极速->没有填参数
 9. 一般经典的使用搭配是，游戏使用费电版，小说和视频软件使用卡顿版
 10. 微工具箱的其他功能并非必需，了解风险之后再使用
 11. 喜欢手动挡的玩家，下载文件后使用文本编辑器打开即可找到想要的参数
@@ -63,7 +63,7 @@ This project aims to solve the problems above by creating automated programs as 
 
 https://github.com/yc9559/cpufreq-interactive-opt/blob/master/20180427-description.md  
 
-Disscussion & Testing in Coolapk：
+Disscussion & Testing in Coolapk：https://www.coolapk.com/feed/6306612  
 
 ## 对比
 
