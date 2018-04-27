@@ -1,0 +1,73 @@
+#!/system/bin/sh
+# Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
+# Author: yc9559
+# Generated at: Thu Apr 26 06:26:43 2018
+
+# $1:value $2:file path
+function set_value() {
+	if [ -f $2 ]; then
+		chown 0.0 $2
+		chmod 0666 $2
+		echo $1 > $2
+		chmod 0444 $2
+	fi
+}
+
+# $1:cpu0 $2:timer_rate $3:value
+function set_param() {
+	echo $3 > /sys/devices/system/cpu/cpufreq/interactive/$2
+}
+
+action=$1
+setenforce 0
+
+chown 0.0 /sys/devices/system/cpu/cpufreq/interactive/*
+chmod 0666 /sys/devices/system/cpu/cpufreq/interactive/*
+
+# RunOnce
+if [ ! -f /project_wipe_runonce ]; then
+	# set flag
+	touch /project_wipe_runonce
+
+	set_value 480000 /sys/devices/system/cpu/cpufreq/scaling_min_freq
+
+	# shared interactive parameters
+	set_param cpu0 timer_rate 20000
+	set_param cpu0 timer_slack 180000
+	set_param cpu0 io_is_busy 0
+fi
+
+if [ "$action" = "powersave" ]; then
+	set_param cpu0 above_hispeed_delay "58000"
+	set_param cpu0 hispeed_freq 1480000
+	set_param cpu0 go_hispeed_load 99
+	set_param cpu0 boostpulse_duration 18000
+	set_param cpu0 target_loads "85 580000:52 680000:88 780000:64 880000:72 980000:52 1080000:92 1180000:99 1280000:86 1380000:99 1480000:93 1580000:99"
+	set_param cpu0 min_sample_time 18000
+fi
+
+if [ "$action" = "balance" ]; then
+	set_param cpu0 above_hispeed_delay "58000"
+	set_param cpu0 hispeed_freq 1480000
+	set_param cpu0 go_hispeed_load 99
+	set_param cpu0 boostpulse_duration 18000
+	set_param cpu0 target_loads "85 580000:48 680000:88 780000:3 880000:67 980000:52 1080000:67 1180000:97 1280000:84 1380000:73 1480000:95 1680000:99"
+	set_param cpu0 min_sample_time 18000
+fi
+
+if [ "$action" = "performance" ]; then
+	set_param cpu0 above_hispeed_delay "58000"
+	set_param cpu0 hispeed_freq 1480000
+	set_param cpu0 go_hispeed_load 99
+	set_param cpu0 boostpulse_duration 18000
+	set_param cpu0 target_loads "85 580000:38 680000:93 780000:43 980000:47 1180000:66 1280000:86 1380000:63 1480000:93 1580000:98"
+	set_param cpu0 min_sample_time 18000
+fi
+
+if [ "$action" = "fast" ]; then
+	# nothing
+fi
+
+chmod 0444 /sys/devices/system/cpu/cpufreq/interactive/*
+
+exit 0
