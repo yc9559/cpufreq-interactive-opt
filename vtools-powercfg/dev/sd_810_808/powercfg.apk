@@ -1,7 +1,7 @@
 #!/system/bin/sh
 # Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
 # Author: yc9559
-# Generated at: Mon Apr 23 23:46:38 2018
+# Generated at: Sun Apr 29 16:23:54 2018
 
 # $1:value $2:file path
 function set_value() {
@@ -67,49 +67,49 @@ fi
 
 if [ "$action" = "powersave" ]; then
 	set_value "0:1180000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	set_param cpu0 above_hispeed_delay "38000 1280000:58000"
+	set_param cpu0 above_hispeed_delay "78000 1480000:38000"
 	set_param cpu0 hispeed_freq 1180000
-	set_param cpu0 go_hispeed_load 95
+	set_param cpu0 go_hispeed_load 99
 	set_param cpu0 boostpulse_duration 18000
-	set_param cpu0 target_loads "85 580000:47 680000:58 780000:52 880000:73 1180000:98"
+	set_param cpu0 target_loads "80 580000:44 680000:58 780000:52 880000:69 1280000:98"
 	set_param cpu0 min_sample_time 18000
-	set_param cpu4 above_hispeed_delay "18000 1280000:58000"
+	set_param cpu4 above_hispeed_delay "18000 1280000:78000"
 	set_param cpu4 hispeed_freq 1180000
-	set_param cpu4 go_hispeed_load 97
+	set_param cpu4 go_hispeed_load 99
 	set_param cpu4 boostpulse_duration 18000
-	set_param cpu4 target_loads "85 480000:47 580000:78 680000:50 780000:72 880000:99 1180000:77 1280000:89 1380000:99"
+	set_param cpu4 target_loads "80 480000:50 580000:68 680000:46 780000:71 880000:89 1180000:76 1280000:92 1380000:99"
 	set_param cpu4 min_sample_time 18000
 fi
 
 if [ "$action" = "balance" ]; then
 	set_value "0:1180000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	set_param cpu0 above_hispeed_delay "58000"
+	set_param cpu0 above_hispeed_delay "38000 1280000:78000 1480000:18000"
 	set_param cpu0 hispeed_freq 1180000
 	set_param cpu0 go_hispeed_load 98
 	set_param cpu0 boostpulse_duration 18000
-	set_param cpu0 target_loads "85 580000:42 680000:38 780000:62 880000:69 1280000:99 1480000:94"
+	set_param cpu0 target_loads "80 580000:41 780000:54 880000:64 1180000:68 1280000:95"
 	set_param cpu0 min_sample_time 18000
-	set_param cpu4 above_hispeed_delay "18000 1280000:58000"
+	set_param cpu4 above_hispeed_delay "18000 1280000:78000 1680000:38000"
 	set_param cpu4 hispeed_freq 1180000
-	set_param cpu4 go_hispeed_load 99
-	set_param cpu4 boostpulse_duration 18000
-	set_param cpu4 target_loads "85 480000:48 580000:67 680000:48 780000:72 880000:81 1180000:77 1280000:90 1380000:99"
+	set_param cpu4 go_hispeed_load 98
+	set_param cpu4 boostpulse_duration 38000
+	set_param cpu4 target_loads "80 480000:12 680000:56 780000:68 880000:74 1280000:92 1380000:99"
 	set_param cpu4 min_sample_time 18000
 fi
 
 if [ "$action" = "performance" ]; then
 	set_value "0:1180000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	set_param cpu0 above_hispeed_delay "38000"
+	set_param cpu0 above_hispeed_delay "38000 1280000:78000"
 	set_param cpu0 hispeed_freq 1180000
-	set_param cpu0 go_hispeed_load 90
+	set_param cpu0 go_hispeed_load 89
 	set_param cpu0 boostpulse_duration 58000
-	set_param cpu0 target_loads "85 580000:41 680000:35 780000:27 880000:63 1180000:68 1280000:99 1480000:87"
+	set_param cpu0 target_loads "80 580000:39 780000:51 1180000:66 1280000:99 1480000:91"
 	set_param cpu0 min_sample_time 18000
-	set_param cpu4 above_hispeed_delay "18000 1280000:58000"
+	set_param cpu4 above_hispeed_delay "18000 1280000:58000 1380000:78000 1680000:18000"
 	set_param cpu4 hispeed_freq 1180000
-	set_param cpu4 go_hispeed_load 97
-	set_param cpu4 boostpulse_duration 18000
-	set_param cpu4 target_loads "85 480000:30 580000:74 680000:34 780000:54 1280000:70 1380000:99"
+	set_param cpu4 go_hispeed_load 98
+	set_param cpu4 boostpulse_duration 78000
+	set_param cpu4 target_loads "80 480000:42 580000:26 680000:49 880000:76 1180000:60 1280000:92 1380000:99"
 	set_param cpu4 min_sample_time 18000
 fi
 
