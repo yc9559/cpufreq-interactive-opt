@@ -1,7 +1,7 @@
 #!/system/bin/sh
 # Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
 # Author: yc9559
-# Generated at: Mon Apr 30 18:24:30 2018
+# Generated at: Mon Apr 30 21:29:09 2018
 
 # $1:value $2:file path
 function set_value() {
@@ -25,13 +25,16 @@ setenforce 0
 if [ ! -f /dev/project_wipe_runonce ]; then
 	# make sure that sysfs is RW
 	mount -o remount,rw sysfs /sys
-	if [ ! `cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor` = "interactive" ]; then 
-		set_value "interactive" /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-	fi
 fi
 
-# disable hotplug to switch governor
+# disable hotplug & Battery Current Limit(BCL) to switch governor
 set_value 0 /sys/module/msm_thermal/core_control/enabled
+echo -n disable > /sys/devices/soc/soc:qcom,bcl/mode
+bcl_hotplug_mask=`cat /sys/devices/soc/soc:qcom,bcl/hotplug_mask`
+echo 0 > /sys/devices/soc/soc:qcom,bcl/hotplug_mask
+bcl_soc_hotplug_mask=`cat /sys/devices/soc/soc:qcom,bcl/hotplug_soc_mask`
+echo 0 > /sys/devices/soc/soc:qcom,bcl/hotplug_soc_mask
+echo -n enable > /sys/devices/soc/soc:qcom,bcl/mode
 
 set_value 1 /sys/devices/system/cpu/cpu2/online
 chown 0.0 /sys/devices/system/cpu/cpu0/cpufreq/interactive/*
@@ -139,7 +142,11 @@ fi
 chmod 0444 /sys/devices/system/cpu/cpu0/cpufreq/interactive/*
 chmod 0444 /sys/devices/system/cpu/cpu2/cpufreq/interactive/*
 
-# re-enable hotplug to switch governor
+# re-enable hotplug & bcl to switch governor
 set_value 1 /sys/module/msm_thermal/core_control/enabled
+echo -n disable > /sys/devices/soc/soc:qcom,bcl/mode
+echo $bcl_hotplug_mask > /sys/devices/soc/soc:qcom,bcl/hotplug_mask
+echo $bcl_soc_hotplug_mask > /sys/devices/soc/soc:qcom,bcl/hotplug_soc_mask
+echo -n enable > /sys/devices/soc/soc:qcom,bcl/mode
 
 exit 0
