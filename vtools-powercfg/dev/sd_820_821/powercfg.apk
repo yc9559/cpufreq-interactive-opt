@@ -1,7 +1,7 @@
 #!/system/bin/sh
 # Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
 # Author: yc9559
-# Generated at: Mon Apr 30 21:29:09 2018
+# Generated at: Wed May  2 19:02:33 2018
 
 # $1:value $2:file path
 function set_value() {
@@ -58,6 +58,11 @@ if [ ! -f /dev/project_wipe_runonce ]; then
 
 	set_value 25 /proc/sys/kernel/sched_downmigrate
 	set_value 50 /proc/sys/kernel/sched_upmigrate
+
+	set_value 0 /dev/cpuset/background/cpus
+	set_value 0-1 /dev/cpuset/system-background/cpus
+	set_value 0-1,2-3 /dev/cpuset/foreground/cpus
+	set_value 0-1,2-3 /dev/cpuset/top-app/cpus
 
 	set_value 50 /sys/module/cpu_boost/parameters/input_boost_ms
 	set_value 0 /sys/module/msm_performance/parameters/touchboost
