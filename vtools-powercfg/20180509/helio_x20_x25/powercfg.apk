@@ -1,0 +1,99 @@
+#!/system/bin/sh
+# Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
+# Author: yc9559
+# Generated at: Tue May  8 13:16:42 2018
+
+# $1:value $2:file path
+function set_value() {
+	if [ -f $2 ]; then
+		chown 0.0 $2
+		chmod 0666 $2
+		echo $1 > $2
+		chmod 0444 $2
+	fi
+}
+
+# $1:cpu0 $2:timer_rate $3:value
+function set_param() {
+	echo $3 > /sys/devices/system/cpu/cpufreq/interactive/$2
+}
+
+action=$1
+setenforce 0
+
+# RunOnce
+if [ ! -f /dev/project_wipe_runonce ]; then
+	# make sure that sysfs is RW
+	mount -o remount,rw sysfs /sys
+fi
+
+chown 0.0 /sys/devices/system/cpu/cpufreq/interactive/*
+chmod 0666 /sys/devices/system/cpu/cpufreq/interactive/*
+
+# RunOnce
+if [ ! -f /dev/project_wipe_runonce ]; then
+	# set flag
+	touch /dev/project_wipe_runonce
+
+	# CORE CONTROL
+	set_value 50 /proc/hps/down_threshold
+
+	set_value 2-3 /dev/cpuset/background/cpus
+	set_value 2-3 /dev/cpuset/system-background/cpus
+	set_value 0-2,4-7,8 /dev/cpuset/foreground/cpus
+	set_value 0-2,4-7,8 /dev/cpuset/top-app/cpus
+
+	# shared interactive parameters
+	set_param cpu0 timer_rate 20000
+	set_param cpu0 timer_slack 180000
+	set_param cpu0 io_is_busy 0
+fi
+
+if [ "$action" = "powersave" ]; then
+	set_value 90 /proc/hps/up_threshold
+	set_value "2 2 0" /proc/hps/num_base_perf_serv
+	set_param cpu0 boost 0
+	set_param cpu0 above_hispeed_delay "18000 1280000:58000"
+	set_param cpu0 hispeed_freq 1180000
+	set_param cpu0 go_hispeed_load 99
+	set_param cpu0 boostpulse_duration 58000
+	set_param cpu0 target_loads "80 380000:8 480000:40 680000:74 780000:36 880000:86 980000:61 1080000:91 1380000:68 1480000:96"
+	set_param cpu0 min_sample_time 18000
+fi
+
+if [ "$action" = "balance" ]; then
+	set_value 80 /proc/hps/up_threshold
+	set_value "3 2 0" /proc/hps/num_base_perf_serv
+	set_param cpu0 boost 0
+	set_param cpu0 above_hispeed_delay "18000 1280000:58000"
+	set_param cpu0 hispeed_freq 1180000
+	set_param cpu0 go_hispeed_load 91
+	set_param cpu0 boostpulse_duration 58000
+	set_param cpu0 target_loads "80 380000:10 580000:32 680000:49 780000:32 880000:78 980000:58 1080000:91 1180000:95 1280000:87 1380000:68 1480000:98"
+	set_param cpu0 min_sample_time 18000
+fi
+
+if [ "$action" = "performance" ]; then
+	set_value 75 /proc/hps/up_threshold
+	set_value "3 3 1" /proc/hps/num_base_perf_serv
+	set_param cpu0 boost 0
+	set_param cpu0 above_hispeed_delay "38000 1280000:18000 1380000:38000 1480000:58000"
+	set_param cpu0 hispeed_freq 1180000
+	set_param cpu0 go_hispeed_load 91
+	set_param cpu0 boostpulse_duration 58000
+	set_param cpu0 target_loads "80 380000:2 480000:19 680000:36 880000:62 980000:68 1080000:86 1180000:95 1280000:76 1380000:56 1480000:97"
+	set_param cpu0 min_sample_time 38000
+fi
+
+if [ "$action" = "fast" ]; then
+	set_value 70 /proc/hps/up_threshold
+	set_value "3 3 1" /proc/hps/num_base_perf_serv
+	set_param cpu0 boost 1
+	set_param cpu0 above_hispeed_delay "18000 1780000:38000"
+	set_param cpu0 hispeed_freq 1480000
+	set_param cpu0 target_loads "90 1780000:95"
+fi
+
+chmod 0444 /sys/devices/system/cpu/cpufreq/interactive/*
+
+exit 0
