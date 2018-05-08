@@ -75,7 +75,7 @@ This project aims to solve the problems above by creating automated programs as 
 2. 复制这个文件到`/data`，重命名为`powercfg`，权限设置为755
 3. 安装微工具箱，启动后开启自动行为和动态响应，启用对应的无障碍服务，把微工具箱加入到后台限制的白名单里
 4. 在性能配置选择每个应用对应使用的配置
-5. 安装 Kernel Auditor，设定它使用省电模式，启动后检查参数是否成功应用
+5. 安装 Kernel Auditor，在微工具箱设定它使用省电模式，启动后检查参数是否成功应用
 6. 卸载 Kernel Auditor
 
 补充说明：
@@ -95,7 +95,7 @@ This project aims to solve the problems above by creating automated programs as 
 
 https://github.com/yc9559/cpufreq-interactive-opt/blob/master/20180509-description.md  
 
-Disscussion & Testing in Coolapk：
+Disscussion & Testing in Coolapk：https://www.coolapk.com/feed/6440134  
 
 ### 微工具箱性能配置下载
 
