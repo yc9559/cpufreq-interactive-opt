@@ -1,7 +1,7 @@
 #!/system/bin/sh
 # Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
 # Author: yc9559
-# Generated at: Tue May  8 13:00:09 2018
+# Generated at: Thu May 10 14:35:44 2018
 
 # $1:value $2:file path
 function set_value() {
@@ -16,6 +16,19 @@ function set_value() {
 # $1:cpu0 $2:timer_rate $3:value
 function set_param() {
 	echo $3 > /sys/devices/system/cpu/cpufreq/interactive/$2
+}
+
+# $1:io-scheduler $2:block-path
+function set_io() {
+	if [ -f $2/queue/scheduler ]; then
+		if [ `grep -c $1 $2/queue/scheduler` = 1 ]; then
+			echo $1 > $2/queue/scheduler
+			echo 512 > $2/queue/read_ahead_kb
+			set_value 0 $2/queue/iostats
+			set_value 256 $2/queue/nr_requests
+			set_value 0 $2/queue/iosched/slice_idle
+		fi
+	fi
 }
 
 action=$1
@@ -45,6 +58,8 @@ if [ ! -f /dev/project_wipe_runonce ]; then
 
 	set_value 480000 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
 
+	set_io cfq /sys/block/mmcblk0
+
 	# shared interactive parameters
 	set_param cpu0 timer_rate 20000
 	set_param cpu0 timer_slack 180000
@@ -57,7 +72,7 @@ if [ "$action" = "powersave" ]; then
 	set_param cpu0 hispeed_freq 1480000
 	set_param cpu0 go_hispeed_load 99
 	set_param cpu0 boostpulse_duration 18000
-	set_param cpu0 target_loads "80 580000:15 680000:88 780000:21 880000:32 980000:53 1080000:92 1180000:98 1280000:89 1380000:63 1480000:93 1580000:98"
+	set_param cpu0 target_loads "80 580000:16 680000:88 780000:59 880000:37 980000:52 1080000:89 1180000:95 1280000:85 1380000:66 1480000:93 1580000:98"
 	set_param cpu0 min_sample_time 18000
 fi
 
@@ -67,7 +82,7 @@ if [ "$action" = "balance" ]; then
 	set_param cpu0 hispeed_freq 1480000
 	set_param cpu0 go_hispeed_load 99
 	set_param cpu0 boostpulse_duration 18000
-	set_param cpu0 target_loads "80 580000:26 680000:83 780000:37 980000:51 1080000:62 1180000:97 1280000:72 1380000:66 1480000:94 1580000:98"
+	set_param cpu0 target_loads "80 580000:11 680000:84 780000:22 880000:32 980000:51 1080000:62 1180000:96 1280000:74 1380000:66 1480000:95"
 	set_param cpu0 min_sample_time 18000
 fi
 
@@ -77,7 +92,7 @@ if [ "$action" = "performance" ]; then
 	set_param cpu0 hispeed_freq 1480000
 	set_param cpu0 go_hispeed_load 99
 	set_param cpu0 boostpulse_duration 18000
-	set_param cpu0 target_loads "80 580000:7 680000:49 780000:22 880000:32 980000:52 1180000:66 1280000:83 1380000:63 1480000:93 1580000:98"
+	set_param cpu0 target_loads "80 580000:14 680000:47 780000:8 880000:32 980000:56 1080000:61 1180000:66 1280000:86 1380000:68 1480000:96"
 	set_param cpu0 min_sample_time 18000
 fi
 
