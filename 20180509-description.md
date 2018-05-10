@@ -125,7 +125,7 @@ https://github.com/yc9559/cpufreq-interactive-opt/blob/master/20180509-descripti
 
 Disscussion & Testing in Coolapk：https://www.coolapk.com/feed/6440134  
 
-### 微工具箱性能配置下载
+### 性能配置下载
 
 - [Snapdragon 835](https://github.com/yc9559/cpufreq-interactive-opt/raw/master/vtools-powercfg/20180509/sd_835/powercfg.apk)
 - [Snapdragon 820 821](https://github.com/yc9559/cpufreq-interactive-opt/raw/master/vtools-powercfg/20180509/sd_820_821/powercfg.apk)
