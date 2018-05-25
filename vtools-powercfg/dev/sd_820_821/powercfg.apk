@@ -1,7 +1,7 @@
 #!/system/bin/sh
 # Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
 # Author: yc9559
-# Generated at: Tue May 22 20:50:40 2018
+# Generated at: Fri May 25 11:51:34 2018
 
 # $1:value $2:file path
 function set_value() {
@@ -46,7 +46,7 @@ function set_io() {
 }
 
 action=$1
-info="Generated at: Tue May 22 20:50:40 2018"
+info="Generated at: Fri May 25 11:51:34 2018"
 
 if [ "$action" = "debug" ]; then
 	echo $info
@@ -89,10 +89,11 @@ if [ ! -f /dev/project_wipe_runonce ]; then
 	set_value 25 /proc/sys/kernel/sched_downmigrate
 	set_value 45 /proc/sys/kernel/sched_upmigrate
 
-	set_value 1 /dev/cpuset/background/cpus
-	set_value 0-1 /dev/cpuset/system-background/cpus
-	set_value 0-1,2-3 /dev/cpuset/foreground/cpus
-	set_value 0-1,2-3 /dev/cpuset/top-app/cpus
+	# avoid permission problem, do not set 0444
+	echo 1 > /dev/cpuset/background/cpus
+	echo 0-1 > /dev/cpuset/system-background/cpus
+	echo 0-1,2-3 > /dev/cpuset/foreground/cpus
+	echo 0-1,2-3 > /dev/cpuset/top-app/cpus
 
 	set_value 80 /sys/module/cpu_boost/parameters/input_boost_ms
 	set_value 0 /sys/module/msm_performance/parameters/touchboost
@@ -107,8 +108,8 @@ if [ ! -f /dev/project_wipe_runonce ]; then
 	set_param cpu2 timer_slack 180000
 	set_param cpu0 boost 0
 	set_param cpu2 boost 0
-	set_param cpu0 io_is_busy 0
-	set_param cpu2 io_is_busy 0
+	# set_param cpu0 io_is_busy 0
+	# set_param cpu2 io_is_busy 0
 	set_param cpu0 use_sched_load 1
 	set_param cpu2 use_sched_load 1
 	set_param cpu0 ignore_hispeed_on_notif 0
@@ -120,51 +121,51 @@ fi
 if [ "$action" = "powersave" ]; then
 	set_value 0 /proc/sys/kernel/sched_boost
 	set_value "0:1280000 2:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	set_param cpu0 above_hispeed_delay "98000"
+	set_param cpu0 above_hispeed_delay "38000"
 	set_param cpu0 hispeed_freq 1280000
 	set_param cpu0 go_hispeed_load 99
 	set_param cpu0 boostpulse_duration 18000
-	set_param cpu0 target_loads "80 380000:49 680000:61 780000:74 880000:84 1080000:91 1180000:98"
+	set_param cpu0 target_loads "80 380000:53 580000:62 780000:84 880000:88 980000:65 1080000:98"
 	set_param cpu0 min_sample_time 18000
-	set_param cpu2 above_hispeed_delay "18000 1280000:38000 1380000:58000 1480000:98000 1780000:138000"
+	set_param cpu2 above_hispeed_delay "18000 1280000:38000 1780000:98000"
 	set_param cpu2 hispeed_freq 1180000
-	set_param cpu2 go_hispeed_load 99
+	set_param cpu2 go_hispeed_load 98
 	set_param cpu2 boostpulse_duration 18000
-	set_param cpu2 target_loads "80 380000:51 480000:11 580000:63 680000:51 780000:69 880000:80 980000:65 1080000:91 1180000:96 1280000:87 1480000:92 1580000:96"
+	set_param cpu2 target_loads "80 380000:53 480000:32 580000:51 680000:59 780000:70 880000:75 980000:65 1080000:86 1180000:91 1280000:98 1380000:69 1480000:98"
 	set_param cpu2 min_sample_time 18000
 fi
 
 if [ "$action" = "balance" ]; then
 	set_value 0 /proc/sys/kernel/sched_boost
 	set_value "0:1280000 2:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	set_param cpu0 above_hispeed_delay "98000 1580000:58000"
+	set_param cpu0 above_hispeed_delay "38000 1580000:18000"
 	set_param cpu0 hispeed_freq 1280000
 	set_param cpu0 go_hispeed_load 99
 	set_param cpu0 boostpulse_duration 18000
-	set_param cpu0 target_loads "80 380000:51 480000:43 580000:51 680000:61 780000:69 880000:87 980000:66 1080000:72 1180000:98"
+	set_param cpu0 target_loads "80 380000:50 480000:43 580000:51 680000:61 780000:69 880000:87 980000:65 1080000:72 1180000:98"
 	set_param cpu0 min_sample_time 18000
-	set_param cpu2 above_hispeed_delay "18000 1380000:78000 1480000:98000 1780000:138000"
-	set_param cpu2 hispeed_freq 1180000
-	set_param cpu2 go_hispeed_load 98
+	set_param cpu2 above_hispeed_delay "18000 1380000:38000 1780000:98000"
+	set_param cpu2 hispeed_freq 1280000
+	set_param cpu2 go_hispeed_load 99
 	set_param cpu2 boostpulse_duration 18000
-	set_param cpu2 target_loads "80 380000:20 580000:45 680000:61 780000:71 980000:16 1080000:73 1180000:90 1280000:75 1380000:82 1480000:91 1580000:97"
+	set_param cpu2 target_loads "80 380000:12 680000:61 880000:71 980000:30 1080000:71 1180000:90 1280000:76 1380000:90 1480000:98"
 	set_param cpu2 min_sample_time 18000
 fi
 
 if [ "$action" = "performance" ]; then
 	set_value 0 /proc/sys/kernel/sched_boost
 	set_value "0:1280000 2:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	set_param cpu0 above_hispeed_delay "98000 1580000:38000"
+	set_param cpu0 above_hispeed_delay "38000"
 	set_param cpu0 hispeed_freq 1280000
-	set_param cpu0 go_hispeed_load 97
+	set_param cpu0 go_hispeed_load 99
 	set_param cpu0 boostpulse_duration 18000
-	set_param cpu0 target_loads "80 380000:23 580000:36 680000:55 780000:70 880000:27 980000:65 1280000:97"
+	set_param cpu0 target_loads "80 380000:52 480000:33 680000:61 880000:32 980000:64 1180000:68 1280000:98"
 	set_param cpu0 min_sample_time 18000
-	set_param cpu2 above_hispeed_delay "98000 1780000:38000"
-	set_param cpu2 hispeed_freq 1480000
+	set_param cpu2 above_hispeed_delay "18000 1380000:38000 1980000:18000"
+	set_param cpu2 hispeed_freq 1180000
 	set_param cpu2 go_hispeed_load 98
-	set_param cpu2 boostpulse_duration 18000
-	set_param cpu2 target_loads "80 380000:49 480000:12 580000:51 680000:64 780000:68 880000:26 980000:62 1080000:34 1180000:68 1280000:74 1480000:92 1580000:97"
+	set_param cpu2 boostpulse_duration 38000
+	set_param cpu2 target_loads "80 380000:22 480000:34 680000:59 780000:55 880000:66 1080000:10 1180000:56 1280000:71 1380000:75 1480000:98"
 	set_param cpu2 min_sample_time 18000
 fi
 

@@ -1,7 +1,7 @@
 #!/system/bin/sh
 # Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
 # Author: yc9559
-# Generated at: Wed May 23 22:18:53 2018
+# Generated at: Fri May 25 12:58:21 2018
 
 # $1:value $2:file path
 function set_value() {
@@ -46,7 +46,10 @@ function set_io() {
 }
 
 action=$1
-info="Generated at: Wed May 23 22:18:53 2018"
+info="Generated at: Fri May 25 12:58:21 2018"
+if [ ! -n "$action" ]; then
+    action="balance"
+fi
 
 if [ "$action" = "debug" ]; then
 	echo $info
@@ -76,18 +79,19 @@ if [ ! -f /dev/project_wipe_runonce ]; then
 	# set flag
 	touch /dev/project_wipe_runonce
 
-	set_value 2-3 /dev/cpuset/background/cpus
-	set_value 2-3 /dev/cpuset/system-background/cpus
-	set_value 0-3,4-7 /dev/cpuset/foreground/cpus
-	set_value 0-3,4-7 /dev/cpuset/top-app/cpus
+	# avoid permission problem, do not set 0444
+	echo 2-3 > /dev/cpuset/background/cpus
+	echo 2-3 > /dev/cpuset/system-background/cpus
+	echo 0-3,4-7 > /dev/cpuset/foreground/cpus
+	echo 0-3,4-7 > /dev/cpuset/top-app/cpus
 
 	# Linaro HMP, between 0 and 1024, maybe compare to the capacity of current cluster
 	# PELT and period average smoothing sampling, so the parameter style differ from WALT by Qualcomm a lot.
 	# https://lists.linaro.org/pipermail/linaro-dev/2012-November/014485.html
 	# https://www.anandtech.com/show/9330/exynos-7420-deep-dive/6
-	set_value 60 /sys/kernel/hmp/load_avg_period_ms
+	# set_value 60 /sys/kernel/hmp/load_avg_period_ms
 	set_value 256 /sys/kernel/hmp/down_threshold
-	set_value 832 /sys/kernel/hmp/up_threshold
+	set_value 640 /sys/kernel/hmp/up_threshold
 	set_value 0 /sys/kernel/hmp/boost
 
 	# Exynos hotplug
@@ -111,28 +115,28 @@ if [ ! -f /dev/project_wipe_runonce ]; then
 fi
 
 if [ "$action" = "powersave" ]; then
-	set_param cpu0 above_hispeed_delay "18000 1380000:78000 1680000:58000"
+	set_param cpu0 above_hispeed_delay "18000 1380000:38000 1680000:18000"
 	set_param cpu0 hispeed_freq 1180000
-	set_param cpu0 go_hispeed_load 99
+	set_param cpu0 go_hispeed_load 98
 	set_param cpu0 boostpulse_duration 18000
-	set_param cpu0 target_loads "80 680000:55 780000:61 880000:70 1180000:75 1380000:98 1680000:84"
+	set_param cpu0 target_loads "80 680000:58 780000:64 980000:68 1180000:85 1380000:98 1680000:85"
 	set_param cpu0 min_sample_time 18000
-	set_param cpu4 above_hispeed_delay "18000 1380000:38000 1680000:98000 1780000:138000"
+	set_param cpu4 above_hispeed_delay "18000 1680000:38000 1780000:98000"
 	set_param cpu4 hispeed_freq 1180000
 	set_param cpu4 go_hispeed_load 98
 	set_param cpu4 boostpulse_duration 38000
-	set_param cpu4 target_loads "80 780000:76 880000:61 980000:76 1080000:66 1180000:77 1380000:85 1680000:98"
+	set_param cpu4 target_loads "80 780000:74 880000:55 980000:77 1080000:57 1180000:91 1380000:85 1680000:98"
 	set_param cpu4 min_sample_time 18000
 fi
 
 if [ "$action" = "balance" ]; then
 	set_param cpu0 above_hispeed_delay "38000 1180000:18000 1680000:38000"
 	set_param cpu0 hispeed_freq 980000
-	set_param cpu0 go_hispeed_load 84
+	set_param cpu0 go_hispeed_load 83
 	set_param cpu0 boostpulse_duration 18000
-	set_param cpu0 target_loads "80 680000:48 780000:53 880000:62 980000:57 1180000:66 1380000:98 1680000:84"
+	set_param cpu0 target_loads "80 680000:51 880000:62 980000:56 1180000:66 1380000:98 1680000:84"
 	set_param cpu0 min_sample_time 18000
-	set_param cpu4 above_hispeed_delay "18000 1680000:98000 1780000:138000"
+	set_param cpu4 above_hispeed_delay "18000 1680000:38000 1780000:98000"
 	set_param cpu4 hispeed_freq 1380000
 	set_param cpu4 go_hispeed_load 98
 	set_param cpu4 boostpulse_duration 38000
@@ -141,17 +145,17 @@ if [ "$action" = "balance" ]; then
 fi
 
 if [ "$action" = "performance" ]; then
-	set_param cpu0 above_hispeed_delay "38000 1380000:18000 1680000:98000"
+	set_param cpu0 above_hispeed_delay "38000 1380000:18000 1680000:38000"
 	set_param cpu0 hispeed_freq 980000
-	set_param cpu0 go_hispeed_load 84
+	set_param cpu0 go_hispeed_load 82
 	set_param cpu0 boostpulse_duration 38000
-	set_param cpu0 target_loads "80 680000:47 880000:55 1180000:64 1380000:83 1680000:77"
+	set_param cpu0 target_loads "80 680000:46 880000:54 1180000:64 1380000:82 1680000:77"
 	set_param cpu0 min_sample_time 38000
-	set_param cpu4 above_hispeed_delay "18000 1680000:98000 1780000:38000"
-	set_param cpu4 hispeed_freq 1380000
-	set_param cpu4 go_hispeed_load 98
+	set_param cpu4 above_hispeed_delay "18000 1180000:38000 1380000:18000 1680000:38000 1980000:18000"
+	set_param cpu4 hispeed_freq 1080000
+	set_param cpu4 go_hispeed_load 91
 	set_param cpu4 boostpulse_duration 38000
-	set_param cpu4 target_loads "80 780000:53 880000:63 980000:53 1180000:68 1380000:73 1680000:98"
+	set_param cpu4 target_loads "80 780000:70 880000:48 980000:63 1080000:26 1180000:57 1380000:73 1680000:98"
 	set_param cpu4 min_sample_time 18000
 fi
 
