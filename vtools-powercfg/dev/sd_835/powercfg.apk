@@ -1,12 +1,12 @@
 #!/system/bin/sh
 # Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
 # Author: yc9559
-# Generated at: Wed May 30 01:04:16 2018
+# Generated at: Thu May 31 18:49:09 2018
 
 # $1:value $2:file path
 function set_value() {
 	if [ -f $2 ]; then
-		chown 0.0 $2
+		# chown 0.0 $2
 		chmod 0666 $2
 		echo $1 > $2
 		chmod 0444 $2
@@ -46,7 +46,7 @@ function set_io() {
 }
 
 action=$1
-info="Generated at: Wed May 30 01:04:16 2018"
+info="Generated at: Thu May 31 18:49:09 2018"
 if [ ! -n "$action" ]; then
     action="balance"
 fi
@@ -66,7 +66,8 @@ fi
 # SELinux permissive
 setenforce 0
 # disable hotplug to switch governor
-set_value 0 /sys/module/msm_thermal/core_control/enabled
+echo 1 > /sys/module/msm_thermal/core_control/enabled
+echo N > /sys/module/msm_thermal/parameters/enabled
 
 echo 1 > /sys/devices/system/cpu/cpu4/online
 chown 0.0 /sys/devices/system/cpu/cpu0/cpufreq/interactive/*
@@ -97,7 +98,7 @@ if [ ! -f /dev/project_wipe_runonce ]; then
 	set_value 20 /sys/module/cpu_boost/parameters/input_boost_ms
 	set_value 0 /sys/module/msm_performance/parameters/touchboost
 
-	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+	set_value 4 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
 	set_value 4 /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
 
 	set_io cfq /sys/block/mmcblk0
@@ -110,10 +111,8 @@ if [ ! -f /dev/project_wipe_runonce ]; then
 	set_param cpu4 timer_slack 180000
 	set_param cpu0 boost 0
 	set_param cpu4 boost 0
-	# set_param cpu0 io_is_busy 0
-	# set_param cpu4 io_is_busy 0
-	set_param cpu0 boostpulse_duration 80000
-	set_param cpu4 boostpulse_duration 80000
+	set_param cpu0 boostpulse_duration 0
+	set_param cpu4 boostpulse_duration 0
 	set_param cpu0 use_sched_load 1
 	set_param cpu4 use_sched_load 1
 	set_param cpu0 ignore_hispeed_on_notif 0
@@ -123,60 +122,56 @@ if [ ! -f /dev/project_wipe_runonce ]; then
 fi
 
 if [ "$action" = "powersave" ]; then
-	set_value 0 /proc/sys/kernel/sched_boost
 	set_value "0:1680000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	set_param cpu0 above_hispeed_delay "18000 1580000:98000"
-	set_param cpu0 hispeed_freq 1480000
+	set_param cpu0 above_hispeed_delay "18000 1380000:78000 1480000:18000 1580000:98000"
+	set_param cpu0 hispeed_freq 1180000
 	set_param cpu0 go_hispeed_load 98
-	set_param cpu0 target_loads "80 380000:65 480000:16 580000:36 680000:52 780000:93 880000:88 980000:96 1180000:92 1680000:98"
+	set_param cpu0 target_loads "80 380000:63 480000:9 780000:90 1080000:79 1180000:92 1280000:98 1380000:84 1480000:97"
 	set_param cpu0 min_sample_time 18000
-	set_param cpu4 above_hispeed_delay "18000 1380000:58000 1480000:78000 1580000:98000 1880000:138000"
-	set_param cpu4 hispeed_freq 1280000
+	set_param cpu4 above_hispeed_delay "18000 1180000:58000 1280000:38000 1380000:18000 1580000:98000 1880000:138000"
+	set_param cpu4 hispeed_freq 1080000
 	set_param cpu4 go_hispeed_load 98
-	set_param cpu4 target_loads "80 380000:37 480000:48 680000:65 780000:86 880000:91 980000:95 1480000:66 1580000:98"
+	set_param cpu4 target_loads "80 380000:45 580000:59 680000:65 780000:90 1080000:97 1180000:74 1380000:98 1480000:92 1580000:98"
 	set_param cpu4 min_sample_time 18000
 fi
 
 if [ "$action" = "balance" ]; then
-	set_value 0 /proc/sys/kernel/sched_boost
 	set_value "0:1680000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	set_param cpu0 above_hispeed_delay "18000 1580000:98000"
-	set_param cpu0 hispeed_freq 1480000
-	set_param cpu0 go_hispeed_load 98
-	set_param cpu0 target_loads "80 380000:26 480000:13 680000:54 880000:76 980000:62 1080000:86 1180000:90 1380000:94 1680000:98"
+	set_param cpu0 hispeed_freq 1180000
+	set_param cpu0 go_hispeed_load 87
+	set_param cpu0 target_loads "80 380000:13 580000:8 680000:21 780000:61 1080000:69 1180000:90 1280000:76 1480000:89 1580000:97"
 	set_param cpu0 min_sample_time 18000
-	set_param cpu4 above_hispeed_delay "18000 1380000:38000 1480000:18000 1580000:98000 1880000:138000"
+	set_param cpu4 above_hispeed_delay "18000 1480000:78000 1580000:98000 1880000:138000"
 	set_param cpu4 hispeed_freq 1280000
-	set_param cpu4 go_hispeed_load 98
-	set_param cpu4 target_loads "80 380000:44 480000:21 580000:49 680000:55 880000:86 980000:81 1280000:94 1480000:84 1580000:98"
+	set_param cpu4 go_hispeed_load 93
+	set_param cpu4 target_loads "80 380000:46 480000:4 580000:57 680000:64 980000:88 1180000:82 1280000:92 1480000:83 1580000:98"
 	set_param cpu4 min_sample_time 18000
 fi
 
 if [ "$action" = "performance" ]; then
-	set_value 0 /proc/sys/kernel/sched_boost
 	set_value "0:1680000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	set_param cpu0 above_hispeed_delay "18000 1580000:98000 1780000:38000"
-	set_param cpu0 hispeed_freq 1480000
-	set_param cpu0 go_hispeed_load 98
-	set_param cpu0 target_loads "80 380000:25 580000:50 780000:57 980000:66 1080000:56 1180000:76 1380000:63 1680000:98"
+	set_param cpu0 above_hispeed_delay "18000 1480000:78000 1580000:98000 1780000:38000"
+	set_param cpu0 hispeed_freq 1180000
+	set_param cpu0 go_hispeed_load 88
+	set_param cpu0 target_loads "80 380000:7 780000:55 980000:50 1180000:89 1280000:72 1380000:3 1480000:73 1680000:98"
 	set_param cpu0 min_sample_time 18000
 	set_param cpu4 above_hispeed_delay "18000 1580000:98000 1880000:38000"
-	set_param cpu4 hispeed_freq 1280000
-	set_param cpu4 go_hispeed_load 92
-	set_param cpu4 target_loads "80 380000:45 480000:24 580000:56 880000:64 1180000:59 1380000:87 1480000:71 1580000:98"
+	set_param cpu4 hispeed_freq 1380000
+	set_param cpu4 go_hispeed_load 93
+	set_param cpu4 target_loads "80 380000:45 480000:3 580000:57 1080000:64 1180000:68 1280000:73 1380000:90 1480000:74 1580000:98"
 	set_param cpu4 min_sample_time 18000
 fi
 
 if [ "$action" = "fast" ]; then
-	set_value 1 /proc/sys/kernel/sched_boost
 	set_value 1480000 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
 	set_value 1380000 /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
 	set_param cpu0 above_hispeed_delay "18000"
 	set_param cpu4 above_hispeed_delay "18000"
 	set_param cpu0 target_loads "80 1780000:97"
 	set_param cpu4 target_loads "80 1980000:97"
-	set_param cpu0 min_sample_time 78000
-	set_param cpu4 min_sample_time 78000
+	set_param cpu0 min_sample_time 38000
+	set_param cpu4 min_sample_time 38000
 fi
 
 chmod 0444 /sys/devices/system/cpu/cpu0/cpufreq/interactive/*
