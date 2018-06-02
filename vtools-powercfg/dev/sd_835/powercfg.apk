@@ -1,7 +1,7 @@
 #!/system/bin/sh
 # Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
 # Author: yc9559
-# Generated at: Thu May 31 18:49:09 2018
+# Generated at: Sat Jun  2 20:25:42 2018
 
 # $1:value $2:file path
 function set_value() {
@@ -46,7 +46,7 @@ function set_io() {
 }
 
 action=$1
-info="Generated at: Thu May 31 18:49:09 2018"
+info="Generated at: Sat Jun  2 20:25:42 2018"
 if [ ! -n "$action" ]; then
     action="balance"
 fi
@@ -123,43 +123,43 @@ fi
 
 if [ "$action" = "powersave" ]; then
 	set_value "0:1680000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	set_param cpu0 above_hispeed_delay "18000 1380000:78000 1480000:18000 1580000:98000"
-	set_param cpu0 hispeed_freq 1180000
+	set_param cpu0 above_hispeed_delay "18000 1480000:98000"
+	set_param cpu0 hispeed_freq 1380000
 	set_param cpu0 go_hispeed_load 98
-	set_param cpu0 target_loads "80 380000:63 480000:9 780000:90 1080000:79 1180000:92 1280000:98 1380000:84 1480000:97"
+	set_param cpu0 target_loads "80 380000:5 580000:43 680000:4 780000:84 1080000:88 1180000:95"
 	set_param cpu0 min_sample_time 18000
-	set_param cpu4 above_hispeed_delay "18000 1180000:58000 1280000:38000 1380000:18000 1580000:98000 1880000:138000"
+	set_param cpu4 above_hispeed_delay "18000 1480000:78000 1580000:98000 1880000:138000"
 	set_param cpu4 hispeed_freq 1080000
-	set_param cpu4 go_hispeed_load 98
-	set_param cpu4 target_loads "80 380000:45 580000:59 680000:65 780000:90 1080000:97 1180000:74 1380000:98 1480000:92 1580000:98"
+	set_param cpu4 go_hispeed_load 94
+	set_param cpu4 target_loads "80 380000:45 680000:65 780000:82 980000:88 1180000:98 1280000:10 1380000:95"
 	set_param cpu4 min_sample_time 18000
 fi
 
 if [ "$action" = "balance" ]; then
 	set_value "0:1680000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	set_param cpu0 above_hispeed_delay "18000 1580000:98000"
-	set_param cpu0 hispeed_freq 1180000
-	set_param cpu0 go_hispeed_load 87
-	set_param cpu0 target_loads "80 380000:13 580000:8 680000:21 780000:61 1080000:69 1180000:90 1280000:76 1480000:89 1580000:97"
+	set_param cpu0 hispeed_freq 1380000
+	set_param cpu0 go_hispeed_load 98
+	set_param cpu0 target_loads "80 380000:6 680000:26 780000:61 980000:55 1080000:70 1180000:92 1280000:79 1380000:72 1480000:96"
 	set_param cpu0 min_sample_time 18000
-	set_param cpu4 above_hispeed_delay "18000 1480000:78000 1580000:98000 1880000:138000"
+	set_param cpu4 above_hispeed_delay "18000 1480000:38000 1580000:98000 1880000:138000"
 	set_param cpu4 hispeed_freq 1280000
-	set_param cpu4 go_hispeed_load 93
-	set_param cpu4 target_loads "80 380000:46 480000:4 580000:57 680000:64 980000:88 1180000:82 1280000:92 1480000:83 1580000:98"
+	set_param cpu4 go_hispeed_load 96
+	set_param cpu4 target_loads "80 380000:45 480000:32 580000:48 680000:56 780000:63 980000:89 1480000:85 1580000:98"
 	set_param cpu4 min_sample_time 18000
 fi
 
 if [ "$action" = "performance" ]; then
 	set_value "0:1680000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	set_param cpu0 above_hispeed_delay "18000 1480000:78000 1580000:98000 1780000:38000"
-	set_param cpu0 hispeed_freq 1180000
-	set_param cpu0 go_hispeed_load 88
-	set_param cpu0 target_loads "80 380000:7 780000:55 980000:50 1180000:89 1280000:72 1380000:3 1480000:73 1680000:98"
+	set_param cpu0 above_hispeed_delay "38000 1580000:98000 1780000:38000"
+	set_param cpu0 hispeed_freq 1480000
+	set_param cpu0 go_hispeed_load 98
+	set_param cpu0 target_loads "80 380000:7 680000:55 780000:61 1180000:84 1280000:68 1380000:64 1580000:6 1680000:98"
 	set_param cpu0 min_sample_time 18000
 	set_param cpu4 above_hispeed_delay "18000 1580000:98000 1880000:38000"
-	set_param cpu4 hispeed_freq 1380000
-	set_param cpu4 go_hispeed_load 93
-	set_param cpu4 target_loads "80 380000:45 480000:3 580000:57 1080000:64 1180000:68 1280000:73 1380000:90 1480000:74 1580000:98"
+	set_param cpu4 hispeed_freq 1280000
+	set_param cpu4 go_hispeed_load 89
+	set_param cpu4 target_loads "80 380000:45 480000:35 580000:47 680000:57 1080000:64 1180000:78 1280000:59 1380000:79 1580000:98"
 	set_param cpu4 min_sample_time 18000
 fi
 
