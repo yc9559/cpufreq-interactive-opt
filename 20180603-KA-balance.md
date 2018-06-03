@@ -67,7 +67,7 @@ Do not use for commercial purposes, prohibit reproducing content and embedding p
 
 使用脚本执行： <https://github.com/yc9559/cpufreq-interactive-opt/blob/master/20180603-description.md>  
 
-Disscussion & Testing in Coolapk：<https://www.coolapk.com/feed/>  
+Disscussion & Testing in Coolapk：<https://www.coolapk.com/feed/6757382>  
 
 ## FAQ
 

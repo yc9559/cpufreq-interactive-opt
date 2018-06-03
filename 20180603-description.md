@@ -62,7 +62,7 @@ Do not use for commercial purposes, prohibit reproducing content and embedding p
 
 适用于 EX/内核调教 的操作： <https://github.com/yc9559/cpufreq-interactive-opt/blob/master/20180603-KA-balance.md>  
 
-Disscussion & Testing in Coolapk：<https://www.coolapk.com/feed/>  
+Disscussion & Testing in Coolapk：<https://www.coolapk.com/feed/6756482>  
 
 ## 如何执行性能配置
 
@@ -94,6 +94,7 @@ Disscussion & Testing in Coolapk：<https://www.coolapk.com/feed/>
 给几个例子：
 
 1.显示参数应用是否生效，不再依赖于 Kernel Auditor 之类的工具
+![tasker-debug-detail](https://github.com/yc9559/cpufreq-interactive-opt/raw/master/src/tasker-debug-detail.jpg)
 ![tasker-debug](https://github.com/yc9559/cpufreq-interactive-opt/raw/master/src/tasker-debug.jpg)
 
 2.快捷模式切换
