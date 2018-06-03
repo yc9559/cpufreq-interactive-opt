@@ -115,7 +115,6 @@ if [ "$action" = "powersave" ]; then
 	set_param cpu0 above_hispeed_delay "18000 1680000:98000 1880000:138000"
 	set_param cpu0 hispeed_freq 1380000
 	set_param cpu0 go_hispeed_load 94
-	set_param cpu0 boostpulse_duration [powersave_uni_boostpulse_duration]
 	set_param cpu0 target_loads "80 980000:66 1380000:96"
 	set_param cpu0 min_sample_time 18000
 fi
@@ -125,7 +124,6 @@ if [ "$action" = "balance" ]; then
 	set_param cpu0 above_hispeed_delay "98000 1880000:138000"
 	set_param cpu0 hispeed_freq 1680000
 	set_param cpu0 go_hispeed_load 97
-	set_param cpu0 boostpulse_duration [balance_uni_boostpulse_duration]
 	set_param cpu0 target_loads "80 980000:63 1380000:72 1680000:97"
 	set_param cpu0 min_sample_time 18000
 fi
@@ -135,7 +133,6 @@ if [ "$action" = "performance" ]; then
 	set_param cpu0 above_hispeed_delay "18000 1680000:98000 1880000:38000"
 	set_param cpu0 hispeed_freq 980000
 	set_param cpu0 go_hispeed_load 89
-	set_param cpu0 boostpulse_duration [performance_uni_boostpulse_duration]
 	set_param cpu0 target_loads "80 980000:55 1380000:75 1680000:98"
 	set_param cpu0 min_sample_time 78000
 fi
