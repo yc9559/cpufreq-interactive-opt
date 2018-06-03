@@ -1,0 +1,141 @@
+#!/system/bin/sh
+# Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
+# Author: yc9559
+# Generated at: Sun Jun  3 12:23:15 2018
+
+# $1:value $2:file path
+function set_value() {
+	if [ -f $2 ]; then
+		# chown 0.0 $2
+		chmod 0666 $2
+		echo $1 > $2
+		chmod 0444 $2
+	fi
+}
+
+# $1:display-name $2:file path
+function print_value() {
+	if [ -f $2 ]; then
+		echo $1
+		cat $2
+	fi
+}
+
+# $1:cpu0 $2:timer_rate $3:value
+function set_param() {
+	echo $3 > /sys/devices/system/cpu/cpufreq/interactive/$2
+}
+
+# $1:cpu0 $2:timer_rate
+function print_param() {
+	echo "$1: $2"
+	cat /sys/devices/system/cpu/cpufreq/interactive/$2
+}
+
+# $1:io-scheduler $2:block-path
+function set_io() {
+	if [ -f $2/queue/scheduler ]; then
+		if [ `grep -c $1 $2/queue/scheduler` = 1 ]; then
+			echo $1 > $2/queue/scheduler
+			echo 512 > $2/queue/read_ahead_kb
+			set_value 0 $2/queue/iostats
+			set_value 256 $2/queue/nr_requests
+			set_value 0 $2/queue/iosched/slice_idle
+		fi
+	fi
+}
+
+action=$1
+info="Generated at: Sun Jun  3 12:23:15 2018"
+if [ ! -n "$action" ]; then
+    action="balance"
+fi
+
+if [ "$action" = "debug" ]; then
+	echo $info
+	print_value "cpu0:min_freq" /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+	print_param cpu0 target_loads
+	print_param cpu0 boostpulse_duration
+	print_value "sched_spill_load" /proc/sys/kernel/sched_spill_load
+	print_value "eMMC IO scheduler" /sys/block/mmcblk0/queue/scheduler
+	print_value "UFS IO scheduler" /sys/block/sda/queue/scheduler
+	which perfd
+	exit 0
+fi
+
+# SELinux permissive
+setenforce 0
+
+chown 0.0 /sys/devices/system/cpu/cpufreq/interactive/*
+chmod 0666 /sys/devices/system/cpu/cpufreq/interactive/*
+set_value 280000 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+
+# RunOnce
+if [ ! -f /dev/project_wipe_runonce ]; then
+	# set flag
+	touch /dev/project_wipe_runonce
+
+	# CORE CONTROL
+	set_value 50 /proc/hps/down_threshold
+
+	# avoid permission problem, do not set 0444
+	echo 2-3 > /dev/cpuset/background/cpus
+	echo 2-3 > /dev/cpuset/system-background/cpus
+	echo 0-3,4-7,8 > /dev/cpuset/foreground/cpus
+	echo 0-3,4-7,8 > /dev/cpuset/top-app/cpus
+
+	set_io cfq /sys/block/mmcblk0
+	set_io cfq /sys/block/sda
+
+	# shared interactive parameters
+	set_param cpu0 timer_rate 20000
+	set_param cpu0 timer_slack 180000
+	set_param cpu0 boost 0
+	set_param cpu0 boostpulse_duration 0
+fi
+
+if [ "$action" = "powersave" ]; then
+	set_value 90 /proc/hps/up_threshold
+	set_value "2 2 0" /proc/hps/num_base_perf_serv
+	set_param cpu0 above_hispeed_delay "18000 1380000:98000"
+	set_param cpu0 hispeed_freq 1180000
+	set_param cpu0 go_hispeed_load 98
+	set_param cpu0 boostpulse_duration [powersave_uni_boostpulse_duration]
+	set_param cpu0 target_loads "80 380000:30 480000:34 580000:28 680000:22 780000:72 1080000:86 1180000:97 1280000:86 1380000:98"
+	set_param cpu0 min_sample_time 18000
+fi
+
+if [ "$action" = "balance" ]; then
+	set_value 80 /proc/hps/up_threshold
+	set_value "3 2 0" /proc/hps/num_base_perf_serv
+	set_param cpu0 above_hispeed_delay "98000"
+	set_param cpu0 hispeed_freq 1380000
+	set_param cpu0 go_hispeed_load 97
+	set_param cpu0 boostpulse_duration [balance_uni_boostpulse_duration]
+	set_param cpu0 target_loads "80 380000:34 680000:21 780000:72 880000:10 980000:42 1080000:62 1180000:88 1380000:93 1480000:98"
+	set_param cpu0 min_sample_time 18000
+fi
+
+if [ "$action" = "performance" ]; then
+	set_value 75 /proc/hps/up_threshold
+	set_value "3 3 1" /proc/hps/num_base_perf_serv
+	set_param cpu0 above_hispeed_delay "18000 1480000:98000 1680000:38000"
+	set_param cpu0 hispeed_freq 1280000
+	set_param cpu0 go_hispeed_load 89
+	set_param cpu0 boostpulse_duration [performance_uni_boostpulse_duration]
+	set_param cpu0 target_loads "80 380000:42 480000:29 680000:19 780000:73 880000:32 1080000:85 1280000:71 1380000:17 1480000:97"
+	set_param cpu0 min_sample_time 18000
+fi
+
+if [ "$action" = "fast" ]; then
+	set_value 70 /proc/hps/up_threshold
+	set_value "3 3 1" /proc/hps/num_base_perf_serv
+	set_value 1280000 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+	set_param cpu0 above_hispeed_delay "18000"
+	set_param cpu0 target_loads "80 1780000:97"
+	set_param cpu0 min_sample_time 38000
+fi
+
+chmod 0444 /sys/devices/system/cpu/cpufreq/interactive/*
+
+exit 0
