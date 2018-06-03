@@ -94,7 +94,7 @@ Disscussion & Testing in Coolapk：<https://www.coolapk.com/feed/6756482>
 给几个例子：
 
 1.显示参数应用是否生效，不再依赖于 Kernel Auditor 之类的工具
-![tasker-debug-detail](https://github.com/yc9559/cpufreq-interactive-opt/raw/master/src/tasker-debug-detail.jpg)
+![tasker-debug-detail](https://github.com/yc9559/cpufreq-interactive-opt/raw/master/src/tasker-debug-detail.png)
 ![tasker-debug](https://github.com/yc9559/cpufreq-interactive-opt/raw/master/src/tasker-debug.jpg)
 
 2.快捷模式切换
