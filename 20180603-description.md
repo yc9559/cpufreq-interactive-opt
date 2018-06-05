@@ -227,7 +227,7 @@ Disscussion & Testing in Coolapk：<https://www.coolapk.com/feed/6756482>
 
 ## 捐赠
 
-并不在乎捐赠的这点钱，之后也不会有更新，如果你实在愿意，下面是感谢~~云讨饭~~通道：  
+并不在乎捐赠的这点钱，之后也不会有更新，如果你实在愿意，下面是感谢~~云讨饭~~通道(写上你的ID和来源平台)：  
 
 ![支付宝捐赠QR](https://github.com/yc9559/cpufreq-interactive-opt/raw/master/src/alipay-qr.png)
 

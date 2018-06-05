@@ -1,7 +1,7 @@
 #!/system/bin/sh
 # Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
 # Author: yc9559
-# Generated at: Sun Jun  3 12:38:40 2018
+# Generated at: Tue Jun  5 19:57:13 2018
 
 # $1:value $2:file path
 function set_value() {
@@ -46,7 +46,7 @@ function set_io() {
 }
 
 action=$1
-info="Generated at: Sun Jun  3 12:38:40 2018"
+info="Generated at: Tue Jun  5 19:57:13 2018"
 if [ ! -n "$action" ]; then
     action="balance"
 fi
@@ -54,8 +54,8 @@ fi
 if [ "$action" = "debug" ]; then
 	echo $info
 	print_value "cpu0:min_freq" /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+	print_param cpu0 above_hispeed_delay
 	print_param cpu0 target_loads
-	print_param cpu0 boostpulse_duration
 	print_value "sched_spill_load" /proc/sys/kernel/sched_spill_load
 	print_value "eMMC IO scheduler" /sys/block/mmcblk0/queue/scheduler
 	print_value "UFS IO scheduler" /sys/block/sda/queue/scheduler
@@ -96,33 +96,33 @@ fi
 if [ "$action" = "powersave" ]; then
 	set_value 90 /proc/hps/up_threshold
 	set_value 1 /proc/hps/num_base_perf_serv
-	set_param cpu0 above_hispeed_delay "38000 1480000:98000"
+	set_param cpu0 above_hispeed_delay "38000 1280000:18000 1480000:98000"
 	set_param cpu0 hispeed_freq 1180000
 	set_param cpu0 go_hispeed_load 98
 	set_param cpu0 boostpulse_duration [powersave_uni_boostpulse_duration]
-	set_param cpu0 target_loads "80 780000:60 1180000:68 1280000:85 1480000:98"
+	set_param cpu0 target_loads "80 780000:51 1180000:65 1280000:83 1480000:98"
 	set_param cpu0 min_sample_time 18000
 fi
 
 if [ "$action" = "balance" ]; then
 	set_value 80 /proc/hps/up_threshold
 	set_value 2 /proc/hps/num_base_perf_serv
-	set_param cpu0 above_hispeed_delay "18000 1280000:38000 1480000:98000"
+	set_param cpu0 above_hispeed_delay "18000 1480000:98000"
 	set_param cpu0 hispeed_freq 1180000
-	set_param cpu0 go_hispeed_load 95
+	set_param cpu0 go_hispeed_load 98
 	set_param cpu0 boostpulse_duration [balance_uni_boostpulse_duration]
-	set_param cpu0 target_loads "80 780000:63 1180000:93 1280000:75 1480000:98"
+	set_param cpu0 target_loads "80 780000:60 1180000:86 1280000:79 1480000:97"
 	set_param cpu0 min_sample_time 38000
 fi
 
 if [ "$action" = "performance" ]; then
 	set_value 75 /proc/hps/up_threshold
 	set_value 3 /proc/hps/num_base_perf_serv
-	set_param cpu0 above_hispeed_delay "18000 1580000:38000"
-	set_param cpu0 hispeed_freq 1280000
-	set_param cpu0 go_hispeed_load 95
+	set_param cpu0 above_hispeed_delay "38000 1580000:98000"
+	set_param cpu0 hispeed_freq 1480000
+	set_param cpu0 go_hispeed_load 98
 	set_param cpu0 boostpulse_duration [performance_uni_boostpulse_duration]
-	set_param cpu0 target_loads "80 780000:62 1180000:45 1280000:62 1480000:71 1580000:98"
+	set_param cpu0 target_loads "80 780000:61 1180000:65 1280000:83 1480000:63 1580000:96"
 	set_param cpu0 min_sample_time 38000
 fi
 
@@ -130,8 +130,8 @@ if [ "$action" = "fast" ]; then
 	set_value 70 /proc/hps/up_threshold
 	set_value 3 /proc/hps/num_base_perf_serv
 	set_value 1280000 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
-	set_param cpu0 above_hispeed_delay "18000"
-	set_param cpu0 target_loads "80 1880000:97"
+	set_param cpu0 above_hispeed_delay "18000 1580000:198000"
+	set_param cpu0 target_loads "80 1880000:90"
 	set_param cpu0 min_sample_time 38000
 fi
 

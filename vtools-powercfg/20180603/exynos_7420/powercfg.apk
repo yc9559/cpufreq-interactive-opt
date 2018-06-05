@@ -1,7 +1,7 @@
 #!/system/bin/sh
 # Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
 # Author: yc9559
-# Generated at: Sun Jun  3 04:59:32 2018
+# Generated at: Tue Jun  5 18:50:48 2018
 
 # $1:value $2:file path
 function set_value() {
@@ -46,7 +46,7 @@ function set_io() {
 }
 
 action=$1
-info="Generated at: Sun Jun  3 04:59:32 2018"
+info="Generated at: Tue Jun  5 18:50:48 2018"
 if [ ! -n "$action" ]; then
     action="balance"
 fi
@@ -54,8 +54,8 @@ fi
 if [ "$action" = "debug" ]; then
 	echo $info
 	print_value "cpu0:min_freq" /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+	print_param cpu0 above_hispeed_delay
 	print_param cpu0 target_loads
-	print_param cpu0 boostpulse_duration
 	print_value "sched_spill_load" /proc/sys/kernel/sched_spill_load
 	print_value "eMMC IO scheduler" /sys/block/mmcblk0/queue/scheduler
 	print_value "UFS IO scheduler" /sys/block/sda/queue/scheduler
@@ -65,6 +65,14 @@ fi
 
 # SELinux permissive
 setenforce 0
+
+if [ ! -f /dev/project_wipe_runonce ]; then
+	# in case of using ondemand as default governor
+	if [ ! `cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor` = "interactive" ]; then 
+		set_value "interactive" /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+		set_value "interactive" /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
+	fi
+fi
 
 echo 1 > /sys/devices/system/cpu/cpu4/online
 chown 0.0 /sys/devices/system/cpu/cpu0/cpufreq/interactive/*
@@ -117,51 +125,51 @@ if [ ! -f /dev/project_wipe_runonce ]; then
 fi
 
 if [ "$action" = "powersave" ]; then
-	set_param cpu0 above_hispeed_delay "38000 1380000:98000"
+	set_param cpu0 above_hispeed_delay "38000 1280000:78000 1380000:98000 1480000:58000"
 	set_param cpu0 hispeed_freq 1180000
-	set_param cpu0 go_hispeed_load 95
-	set_param cpu0 target_loads "80 480000:6 580000:28 680000:19 780000:52 880000:61 1080000:70 1180000:94 1380000:98"
+	set_param cpu0 go_hispeed_load 96
+	set_param cpu0 target_loads "80 480000:28 580000:19 680000:37 780000:51 880000:61 1080000:83 1180000:66 1280000:91 1380000:96"
 	set_param cpu0 min_sample_time 18000
-	set_param cpu4 above_hispeed_delay "18000 1480000:98000 1880000:138000"
-	set_param cpu4 hispeed_freq 1380000
-	set_param cpu4 go_hispeed_load 98
-	set_param cpu4 target_loads "80 980000:28 1080000:79 1180000:64 1280000:73 1380000:89 1480000:97"
+	set_param cpu4 above_hispeed_delay "98000 1880000:138000"
+	set_param cpu4 hispeed_freq 1480000
+	set_param cpu4 go_hispeed_load 97
+	set_param cpu4 target_loads "80 880000:74 980000:56 1080000:80 1180000:92 1380000:85 1480000:93 1580000:98"
 	set_param cpu4 min_sample_time 18000
 fi
 
 if [ "$action" = "balance" ]; then
-	set_param cpu0 above_hispeed_delay "38000 1380000:98000 1480000:18000"
+	set_param cpu0 above_hispeed_delay "58000 1280000:18000 1380000:98000 1480000:58000"
 	set_param cpu0 hispeed_freq 1180000
-	set_param cpu0 go_hispeed_load 95
-	set_param cpu0 target_loads "80 480000:26 680000:69 780000:59 880000:27 980000:18 1080000:76 1180000:89 1280000:83 1480000:70"
+	set_param cpu0 go_hispeed_load 97
+	set_param cpu0 target_loads "80 480000:29 580000:12 680000:69 780000:22 880000:36 1080000:80 1180000:89 1480000:63"
 	set_param cpu0 min_sample_time 38000
-	set_param cpu4 above_hispeed_delay "18000 1580000:98000 1880000:138000"
+	set_param cpu4 above_hispeed_delay "18000 1480000:78000 1580000:98000 1880000:138000"
 	set_param cpu4 hispeed_freq 1380000
-	set_param cpu4 go_hispeed_load 93
-	set_param cpu4 target_loads "80 880000:22 980000:57 1080000:34 1180000:75 1480000:87 1580000:97"
+	set_param cpu4 go_hispeed_load 96
+	set_param cpu4 target_loads "80 880000:27 980000:44 1080000:71 1180000:32 1280000:64 1380000:78 1480000:87 1580000:98"
 	set_param cpu4 min_sample_time 18000
 fi
 
 if [ "$action" = "performance" ]; then
-	set_param cpu0 above_hispeed_delay "18000 1280000:98000 1380000:38000 1480000:98000"
+	set_param cpu0 above_hispeed_delay "18000 1280000:98000 1380000:38000 1480000:58000"
 	set_param cpu0 hispeed_freq 1180000
-	set_param cpu0 go_hispeed_load 98
-	set_param cpu0 target_loads "80 480000:28 680000:69 780000:48 880000:37 980000:4 1080000:81 1180000:85 1380000:98 1480000:61"
+	set_param cpu0 go_hispeed_load 97
+	set_param cpu0 target_loads "80 480000:26 580000:32 680000:69 780000:50 880000:15 1080000:80 1180000:85 1480000:56"
 	set_param cpu0 min_sample_time 38000
-	set_param cpu4 above_hispeed_delay "18000 880000:98000 980000:38000 1080000:98000 1180000:18000 1480000:38000 1580000:98000 1880000:38000"
+	set_param cpu4 above_hispeed_delay "18000 880000:38000 980000:58000 1080000:18000 1180000:38000 1280000:18000 1480000:78000 1580000:98000 1880000:38000"
 	set_param cpu4 hispeed_freq 780000
-	set_param cpu4 go_hispeed_load 82
-	set_param cpu4 target_loads "80 880000:11 980000:53 1080000:41 1180000:61 1280000:67 1380000:75 1480000:45 1580000:73 1680000:98"
+	set_param cpu4 go_hispeed_load 98
+	set_param cpu4 target_loads "80 880000:4 980000:29 1080000:57 1280000:66 1480000:44 1580000:66 1680000:98"
 	set_param cpu4 min_sample_time 18000
 fi
 
 if [ "$action" = "fast" ]; then
 	set_value 1280000 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
 	set_value 1380000 /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
-	set_param cpu0 above_hispeed_delay "18000"
-	set_param cpu4 above_hispeed_delay "18000"
-	set_param cpu0 target_loads "80 1480000:97"
-	set_param cpu4 target_loads "80 1980000:97"
+	set_param cpu0 above_hispeed_delay "18000 1380000:198000"
+	set_param cpu4 above_hispeed_delay "18000 1980000:198000"
+	set_param cpu0 target_loads "80 1480000:90"
+	set_param cpu4 target_loads "80 1980000:90"
 	set_param cpu0 min_sample_time 38000
 	set_param cpu4 min_sample_time 38000
 fi

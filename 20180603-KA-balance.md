@@ -96,23 +96,36 @@ Disscussion & Testing in Coolapk：<https://www.coolapk.com/feed/6757382>
 
 ## 目录
 
-- [Snapdragon 835](#snapdragon-835)
-- [Snapdragon 820 821](#snapdragon-820-821)
-- [Snapdragon 810 808](#snapdragon-810-808)
-- [Snapdragon 801 800 805](#snapdragon-801-800-805)
-- [Snapdragon 660](#snapdragon-660)
-- [Snapdragon 636](#snapdragon-636)
-- [Snapdragon 652 650](#snapdragon-652-650)
-- [Snapdragon 625 626](#snapdragon-625-626)
-- [Exynos 8895](#exynos-8895)
-- [Exynos 8890](#exynos-8890)
-- [Exynos 7420](#exynos-7420)
-- [Kirin 970](#kirin-970)
-- [Kirin 960](#kirin-960)
-- [Kirin 950 955](#kirin-950-955)
-- [Helio X20 X25](#helio-x20-x25)
-- [Helio X10](#helio-x10)
-- [Atom z3560 z3580](#atom-z3560-z3580)
+- [Project WIPE](#project-wipe)
+    - [支持如下SOC](#soc)
+    - [警告(Warning)](#warning)
+    - [结束语](#)
+    - [有啥不同](#)
+    - [对比](#)
+    - [操作指南](#)
+    - [传送门](#)
+    - [FAQ](#faq)
+    - [目录](#)
+        - [公共的部分](#)
+        - [Snapdragon 835](#snapdragon-835)
+        - [Snapdragon 820 821](#snapdragon-820-821)
+        - [Snapdragon 810 808](#snapdragon-810-808)
+        - [Snapdragon 801 800 805](#snapdragon-801-800-805)
+        - [Snapdragon 660](#snapdragon-660)
+        - [Snapdragon 636](#snapdragon-636)
+        - [Snapdragon 652 650](#snapdragon-652-650)
+        - [Snapdragon 625 626](#snapdragon-625-626)
+        - [Exynos 8895](#exynos-8895)
+        - [Exynos 8890](#exynos-8890)
+        - [Exynos 7420](#exynos-7420)
+        - [Kirin 970](#kirin-970)
+        - [Kirin 960](#kirin-960)
+        - [Kirin 950 955](#kirin-950-955)
+        - [Helio X20 X25](#helio-x20-x25)
+        - [Helio X10](#helio-x10)
+        - [Atom z3560 z3580](#atom-z3560-z3580)
+    - [Credit](#credit)
+    - [捐赠](#)
 
 ### 公共的部分
 
@@ -703,7 +716,7 @@ target_loads:
 
 ## 捐赠
 
-并不在乎捐赠的这点钱，之后也不会有更新，如果你实在愿意，下面是感谢~~云讨饭~~通道：  
+并不在乎捐赠的这点钱，之后也不会有更新，如果你实在愿意，下面是感谢~~云讨饭~~通道(写上你的ID和来源平台)：  
 
 ![支付宝捐赠QR](https://github.com/yc9559/cpufreq-interactive-opt/raw/master/src/alipay-qr.png)
 

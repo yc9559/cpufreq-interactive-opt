@@ -1,7 +1,7 @@
 #!/system/bin/sh
 # Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
 # Author: yc9559
-# Generated at: Sun Jun  3 01:48:59 2018
+# Generated at: Tue Jun  5 13:35:04 2018
 
 # $1:value $2:file path
 function set_value() {
@@ -46,7 +46,7 @@ function set_io() {
 }
 
 action=$1
-info="Generated at: Sun Jun  3 01:48:59 2018"
+info="Generated at: Tue Jun  5 13:35:04 2018"
 if [ ! -n "$action" ]; then
     action="balance"
 fi
@@ -54,8 +54,8 @@ fi
 if [ "$action" = "debug" ]; then
 	echo $info
 	print_value "cpu0:min_freq" /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+	print_param cpu0 above_hispeed_delay
 	print_param cpu0 target_loads
-	print_param cpu0 boostpulse_duration
 	print_value "sched_spill_load" /proc/sys/kernel/sched_spill_load
 	print_value "eMMC IO scheduler" /sys/block/mmcblk0/queue/scheduler
 	print_value "UFS IO scheduler" /sys/block/sda/queue/scheduler
@@ -65,6 +65,14 @@ fi
 
 # SELinux permissive
 setenforce 0
+
+if [ ! -f /dev/project_wipe_runonce ]; then
+	# in case of using ondemand as default governor
+	if [ ! `cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor` = "interactive" ]; then 
+		set_value "interactive" /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+		set_value "interactive" /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
+	fi
+fi
 
 echo 1 > /sys/devices/system/cpu/cpu4/online
 chown 0.0 /sys/devices/system/cpu/cpu0/cpufreq/interactive/*
@@ -158,10 +166,10 @@ fi
 if [ "$action" = "fast" ]; then
 	set_value 1480000 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
 	set_value 1380000 /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
-	set_param cpu0 above_hispeed_delay "18000"
-	set_param cpu4 above_hispeed_delay "18000"
-	set_param cpu0 target_loads "80 1780000:97"
-	set_param cpu4 target_loads "80 1980000:97"
+	set_param cpu0 above_hispeed_delay "18000 1480000:198000"
+	set_param cpu4 above_hispeed_delay "18000 1980000:198000"
+	set_param cpu0 target_loads "80 1780000:90"
+	set_param cpu4 target_loads "80 1980000:90"
 	set_param cpu0 min_sample_time 38000
 	set_param cpu4 min_sample_time 38000
 fi
