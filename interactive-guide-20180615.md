@@ -51,19 +51,17 @@ CPU频率 -> freq_to_targetload          -> 这个CPU频率对应的target_loads
 ```python
 freq_to_above_hispeed_delay(CPU频率)
 {
-
-# 比如"19000 1500000:39000 1800000:79000"
-if CPU频率 < 1500000:
-    return 19000      # 如果执行到这一行，直接结束该功能块，不再往下执行
-if CPU频率 < 1800000:
-    return 39000      # 如果执行到这一行，直接结束该功能块，不再往下执行
-return 79000          # 如果上面都不匹配
-
+    # 比如"19000 1500000:39000 1800000:79000"
+    if CPU频率 < 1500000:
+        return 19000      # 如果执行到这一行，直接结束该功能块，不再往下执行
+    if CPU频率 < 1800000:
+        return 39000      # 如果执行到这一行，直接结束该功能块，不再往下执行
+    return 79000          # 如果上面都不匹配
 }
 
 freq_to_targetload(CPU频率)
 {
-跟上面同一个模式
+    跟上面同一个模式
 }
 ```
 
@@ -76,43 +74,41 @@ freq_to_targetload(CPU频率)
 # 如果 当前需要的性能 - 当前提供的性能 < sched_freq_dec_notify，则notif_pending=1，否则notif_pending=0
 cpufreq_interactive_timer(当前CPU频率, 当前CPU占用率)
 {
+    是否收到调度器通知  = use_sched_load == 1 and use_migration_notif == 1 and notif_pending == 1 
+    是否跳过hispeed逻辑 = 是否收到调度器通知 and ignore_hispeed_on_notif == 1
+    是否跳过降频逻辑    = 是否收到调度器通知 and fast_ramp_down == 1
 
-是否收到调度器通知  = use_sched_load == 1 and use_migration_notif == 1 and notif_pending == 1 
-是否跳过hispeed逻辑 = 是否收到调度器通知 and ignore_hispeed_on_notif == 1
-是否跳过降频逻辑    = 是否收到调度器通知 and fast_ramp_down == 1
+    下一CPU频率 = choose_freq(当前CPU频率, 当前CPU占用率)
+    if  use_sched_load == 1 and use_migration_notif == 1 and enable_prediction == 1:
+        瞎蒙的下一CPU频率 = choose_freq(当前CPU频率, 瞎蒙的下一CPU占用率)
+        下一CPU频率 = 取最大(下一CPU频率, 瞎蒙的下一CPU频率)
 
-下一CPU频率 = choose_freq(当前CPU频率, 当前CPU占用率)
-if  use_sched_load == 1 and use_migration_notif == 1 and enable_prediction == 1:
-    瞎蒙的下一CPU频率 = choose_freq(当前CPU频率, 瞎蒙的下一CPU占用率)
-    下一CPU频率 = 取最大(下一CPU频率, 瞎蒙的下一CPU频率)
+    if 是否跳过hispeed逻辑 == False:
+        if 当前CPU占用率 >= go_hispeed_load:
+            if 当前CPU频率 < hispeed_freq:
+                下一CPU频率 = hispeed_freq
+            else:
+                下一CPU频率 = 取最大(hispeed_freq, 下一CPU频率)
+    下一CPU频率 = 在频率表选一个大于等于它的频率里最小的(下一CPU频率)
 
-if 是否跳过hispeed逻辑 == False:
-    if 当前CPU占用率 >= go_hispeed_load:
-        if 当前CPU频率 < hispeed_freq:
-            下一CPU频率 = hispeed_freq
-        else:
-            下一CPU频率 = 取最大(hispeed_freq, 下一CPU频率)
-下一CPU频率 = 在频率表选一个大于等于它的频率里最小的(下一CPU频率)
+    above_hispeed_delay = freq_to_above_hispeed_delay(当前CPU频率)
 
-above_hispeed_delay = freq_to_above_hispeed_delay(当前CPU频率)
+    if 是否跳过hispeed逻辑 == False:
+        if 当前CPU频率 >= hispeed_freq and 下一CPU频率 > 当前CPU频率:
+            if 当前时刻 - 上次hispeed状态允许提升频率的时刻 < above_hispeed_delay:
+                下一CPU频率 = 当前CPU频率
+                return 下一CPU频率      # 如果执行到这一行，直接结束该功能块，不再往下执行
 
-if 是否跳过hispeed逻辑 == False:
-    if 当前CPU频率 >= hispeed_freq and 下一CPU频率 > 当前CPU频率:
-        if 当前时刻 - 上次hispeed状态允许提升频率的时刻 < above_hispeed_delay:
+    上次hispeed状态允许提升频率的时刻 = 当前时刻
+
+    if 是否跳过降频逻辑 == False:
+        if 下一CPU频率 < 当前CPU频率 and 当前时刻 - 上次允许降频的时刻 < min_sampling_time:
             下一CPU频率 = 当前CPU频率
             return 下一CPU频率      # 如果执行到这一行，直接结束该功能块，不再往下执行
 
-上次hispeed状态允许提升频率的时刻 = 当前时刻
+    上次允许降频的时刻 = 当前时刻
 
-if 是否跳过降频逻辑 == False:
-    if 下一CPU频率 < 当前CPU频率 and 当前时刻 - 上次允许降频的时刻 < min_sampling_time:
-        下一CPU频率 = 当前CPU频率
-        return 下一CPU频率      # 如果执行到这一行，直接结束该功能块，不再往下执行
-
-上次允许降频的时刻 = 当前时刻
-
-return 下一CPU频率
-
+    return 下一CPU频率
 }
 ```
 
@@ -120,41 +116,39 @@ return 下一CPU频率
 # 由于“这次”与“上次”的视觉区分度低，用 prev_freq 代替 上次，用 freq 代替 这次
 choose_freq(当前CPU频率, 当前CPU占用率)
 {
+    下边界频率 = 0
+    上边界频率 = 999999999
+    当前负载 = 当前CPU频率 * 当前CPU占用率
+    prev_freq = 当前CPU频率
+    freq = 当前CPU频率
 
-下边界频率 = 0
-上边界频率 = 999999999
-当前负载 = 当前CPU频率 * 当前CPU占用率
-prev_freq = 当前CPU频率
-freq = 当前CPU频率
+    这是循环的头
+    {
+        prev_freq = freq
+        freq对应的targetload = freq_to_targetload(freq)
+        freq = 在频率表选一个比它大的频率里最小的(当前负载 / freq对应的targetload)
 
-这是循环的头
-{
-    prev_freq = freq
-    freq对应的targetload = freq_to_targetload(freq)
-    freq = 在频率表选一个比它大的频率里最小的(当前负载 / freq对应的targetload)
+        if freq > prev_freq:
+            下边界频率 = prev_freq
+            if freq >= 上边界频率:
+                freq = 上边界频率 - 1
+                freq = 在频率表选一个小于等于它的频率里最大的(freq)
+                if freq == 下边界频率:
+                    freq = 上边界频率
+                    break   # 跳出这个循环，去循环的尾
+        elif freq < prev_freq:
+            上边界频率 = prev_freq
+            if freq <= 下边界频率:
+                freq = 下边界频率 + 1
+                freq = 在频率表选一个大于等于它的频率里最小的(freq)
+                if freq == 上边界频率:
+                    break   # 跳出这个循环，去循环的尾
+        if prev_freq == freq:
+            break   # 跳出这个循环，去循环的尾巴
+    }
+    这是循环的尾
 
-    if freq > prev_freq:
-        下边界频率 = prev_freq
-        if freq >= 上边界频率:
-            freq = 上边界频率 - 1
-            freq = 在频率表选一个小于等于它的频率里最大的(freq)
-            if freq == 下边界频率:
-                freq = 上边界频率
-                break   # 跳出这个循环，去循环的尾
-    elif freq < prev_freq:
-        上边界频率 = prev_freq
-        if freq <= 下边界频率:
-            freq = 下边界频率 + 1
-            freq = 在频率表选一个大于等于它的频率里最小的(freq)
-            if freq == 上边界频率:
-                break   # 跳出这个循环，去循环的尾
-    if prev_freq == freq:
-        break   # 跳出这个循环，去循环的尾巴
-}
-这是循环的尾
-
-return freq
-
+    return freq
 }
 ```
 
@@ -369,7 +363,7 @@ above_hispeed_delay = freq_to_above_hispeed_delay(1440) = 38000
 
 ## 【 上文没有提到的Tunable解释 】
 
-1. boostpulse_duration
+1. boostpulse_duration  
 类型：时长  
 说起来，为什么`interactive`调速器是这个交互式的名字？  
 因为相比纯属靠采样的调速器比如`ondemand`，`interactive`自带了触摸升频的功能  
@@ -380,11 +374,11 @@ above_hispeed_delay = freq_to_above_hispeed_delay(1440) = 38000
 不过如今已经有了独立的`input_boost`，这个功能可能不被触摸的中断服务调用了  
 例如 80000，表示一次boost的时长为80ms  
 
-2. boost
+2. boost  
 类型：是否  
 一直保持boost状态  
 
-3. io_is_busy
+3. io_is_busy  
 类型：是否  
 把I/O时间计入CPU工作时长  
 CPU状态分为工作(busy)和空闲(idle)  
@@ -392,17 +386,17 @@ CPU状态分为工作(busy)和空闲(idle)
 如果I/O性能与CPU主频关系密切，启用它  
 另外，这个参数与HMP Scheduler的负载统计的`io_is_busy`保持一致  
 
-4. sampling_down_factor
+4. sampling_down_factor  
 类型：倍率  
 当前频率为最高频时，保底时间为 `sampling_down_factor` x `min_sample_time`  
 例如 3，表示 3x39000 = 117000(圆整到6个`timer_rate`)  
 例如 0，表示 1 倍  
 
-5. max_freq_hysteresis
+5. max_freq_hysteresis  
 类型：时长  
 相当于在最高频时的`min_sampling_time`  
 
-6. align_windows
+6. align_windows  
 类型：是否  
 对齐`interactive`的定时器时间窗口，以前用于骁龙600,800这类aSMP处理器的参数  
 由于异步多核心的各个核心的调速器各自独立，需要对齐时间窗口  
