@@ -80,8 +80,8 @@ cpufreq_interactive_timer(当前CPU频率, 当前CPU占用率)
 
     下一CPU频率 = choose_freq(当前CPU频率, 当前CPU占用率)
     if  use_sched_load == 1 and use_migration_notif == 1 and enable_prediction == 1:
-        瞎蒙的下一CPU频率 = choose_freq(当前CPU频率, 瞎蒙的下一CPU占用率)
-        下一CPU频率 = 取最大(下一CPU频率, 瞎蒙的下一CPU频率)
+        猜测的下一CPU频率 = choose_freq(当前CPU频率, HMP调度器猜测的下一CPU占用率)
+        下一CPU频率 = 取最大(下一CPU频率, 猜测的下一CPU频率)
 
     if 是否跳过hispeed逻辑 == False:
         if 当前CPU占用率 >= go_hispeed_load:
@@ -361,7 +361,7 @@ above_hispeed_delay = freq_to_above_hispeed_delay(1440) = 38000
 # 尽管此时 2060e3-2000e3 = 60e3 < 138e3，但绕开了开头的限制
 ```
 
-## 【 上文没有提到的Tunable解释 】
+## 【 补充一些Tunable解释 】
 
 1. boostpulse_duration  
 类型：时长  
@@ -378,7 +378,44 @@ above_hispeed_delay = freq_to_above_hispeed_delay(1440) = 38000
 类型：是否  
 一直保持boost状态  
 
-3. io_is_busy  
+3. timer_rate  
+类型：时长  
+一般情况interactive的定时器时长，为一个周期，调速器被定时唤醒  
+统计上一周期的负载值，并作出下一周期的频率选择  
+例如 20000，表示周期为 20ms  
+
+4. timer_slack  
+类型：时长  
+闲置情况下，如果当前频率高于最低频率，经过 timer_rate + timer_slack 强制唤醒调速器，调整频率  
+例如 80000，表示经过 80+20ms 强制唤醒调速器  
+
+5. use_sched_load  
+类型：是否  
+HMP Scheduler属于GTS(Global Task Scheduler)全局任务调度器  
+负责下一时间片运行什么任务，以及定时检查任务交给大核还是小核  
+配合HMP Scheduler的参数，使用HMP Scheduler提供的负载值代替传统的忙/闲统计  
+传统方法统计周期内的工作(busy)和空闲(idle)时间，得到上一周期的CPU负载值(实际上是工作时间占比)  
+考虑如下的场景：  
+上一周期，小核负载很高，大核很空闲，调度器决定把任务从小核迁移到大核  
+调速器根据历史信息，发现小核负载高需要提升频率，大核心保持不变  
+结果小核心提升频率却空载，大核心保持频率性能不足  
+这显然存在问题，然而作为调度器，它知道横跨所有核心的历史信息  
+还是考虑前面的场景：  
+上一周期，小核负载很高，大核很空闲，调度器决定把任务从小核迁移到大核  
+调度器把小核心的历史数据，经过相对性能折算，剪切到大核心上  
+调速器根据调度器提供的历史信息，  
+发现小核负载低需要降低频率，大核心负载高需要提升频率  
+结果小核心降低频率节省电力，大核心提升频率满足任务需求  
+如果你愿意思考一下，会有非常有趣的结果:  
+传递给interactive的负载值可能超过100  
+
+6. align_windows  
+类型：是否  
+对齐`interactive`的定时器时间窗口，以前用于骁龙600,800这类aSMP处理器的参数  
+由于异步多核心的各个核心的调速器各自独立，需要对齐时间窗口  
+如果`use_sched_load`设置为1，那么时间窗口自然是对齐的  
+
+7. io_is_busy  
 类型：是否  
 把I/O时间计入CPU工作时长  
 CPU状态分为工作(busy)和空闲(idle)  
@@ -386,21 +423,15 @@ CPU状态分为工作(busy)和空闲(idle)
 如果I/O性能与CPU主频关系密切，启用它  
 另外，这个参数与HMP Scheduler的负载统计的`io_is_busy`保持一致  
 
-4. sampling_down_factor  
+8. sampling_down_factor  
 类型：倍率  
 当前频率为最高频时，保底时间为 `sampling_down_factor` x `min_sample_time`  
 例如 3，表示 3x39000 = 117000(圆整到6个`timer_rate`)  
 例如 0，表示 1 倍  
 
-5. max_freq_hysteresis  
+9. max_freq_hysteresis  
 类型：时长  
 相当于在最高频时的`min_sampling_time`  
-
-6. align_windows  
-类型：是否  
-对齐`interactive`的定时器时间窗口，以前用于骁龙600,800这类aSMP处理器的参数  
-由于异步多核心的各个核心的调速器各自独立，需要对齐时间窗口  
-如果`use_sched_load`设置为1，那么时间窗口自然是对齐的  
 
 ## 【 参考 】
 
