@@ -54,6 +54,14 @@ Do not use for commercial purposes, prohibit reproducing content and embedding p
 - 平台从微工具箱切换到 Tasker，保持对微工具箱的兼容，实现目前最佳的调整和事件自由度
 - 支持 Kernel Auditor 的模拟init.d
 
+Update 20180603.2：  
+
+- misc：新的输入升频风格，略微提升最低频率保持2.5s，使得在触摸后interactive选频倾向于保留更多余量
+- misc：低延迟模式的频率动态锁从2.0G降低到1.9G
+- template：powercfg执行之后可以输出是否成功，如`balance OK`
+- template：修复由关闭perfd引起的最低频设置过高
+- template：新的架构设计更加抽象，易于移植，易于阅读
+
 ## 对比
 
 ![与高通默认参数对比](https://github.com/yc9559/cpufreq-interactive-opt/raw/master/src/20180603.png)
@@ -144,28 +152,11 @@ Disscussion & Testing in Coolapk：<https://www.coolapk.com/feed/6756482>
 1. 由于这个方式不支持参数，只能应用均衡版
 2. Kernel Auditor 很可能会出现CPU 100%的bug
 
-## 操作指南(install-recovery_sh)
+## 操作指南(WIPE_flashable)
 
-`install-recovery.sh`是部分recovery自动生成的文件，用于应对某些机型对于recovery分区的覆盖保护，每次开机启动时检查自定义recovery是否存活。如果不想要自动切换，不想要第三方工具的后台，原本喜欢刷机包(不是我做的)的方式使用的，建议使用这个方法。
+由 @cjybyjk 制作的多合一卡刷包：  
 
-前提条件：与Tasker的相同
-
-如何操作：
-
-1. 在下面找到适用的SOC，复制链接到ADM下载器，新建下载任务完成下载
-2. 复制这个文件到`/data`，重命名为`powercfg`，权限设置为755
-3. 在`/etc/install-recovery.sh`尾部追加指令，可选的如下：
-    - `sh /data/powercfg balance`切换到均衡
-    - `sh /data/powercfg powersave`切换到卡顿
-    - `sh /data/powercfg performance`切换到费电
-    - `sh /data/powercfg fast`切换到低延迟版
-4. 重启后启动全新安装的 Kernel Auditor 检查参数是否生效
-5. 卸载 Kernel Auditor
-
-补充说明：
-
-1. 均衡 = 均衡版，省电 = 卡顿版，游戏 = 费电版，极速 = 低延迟
-2. 在刷ROM时一般会清除system分区，所以在刷ROM之后一般需要重新操作一次
+<https://github.com/cjybyjk/WIPE_flashable>  
 
 ## FAQ
 
@@ -216,7 +207,7 @@ Disscussion & Testing in Coolapk：<https://www.coolapk.com/feed/6756482>
 
 [Distributed Evolutionary Algorithms in Python](https://github.com/DEAP/deap)  
 @ft1858336  跟他交流意识到从201710开始一直存在的仿真逻辑和interactive的不一致，直接导致了180526版没有发出来  
-@Yoooooo    瞬时性能意见，比如MIUI多任务切换，性能释放合页标准差，测试S835的参数，跟上了日更的节奏  
+@Yoooooo    瞬时性能意见，比如MIUI多任务切换，性能释放合页标准差，测试S835的参数，跟上了日更的节奏，协助测试20180603.2  
 @僞裝灬     测试S821的参数，基本跟上了日更的节奏  
 @xujiyuan723测试S808的参数，启发统一S810/808最高频率  
 @HELISIGN   测试S821的参数，启发above_hispeed_delay改进  
