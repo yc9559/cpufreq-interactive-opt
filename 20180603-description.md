@@ -10,6 +10,7 @@ Exynos 8895, 8890, 7420
 Kirin 970, 960, 950/955  
 Helio X20/X25, X10  
 Atom z3560/z3580  
+Snapdragon 845(非程序生成)
 
 ## 警告(Warning)
 
@@ -202,6 +203,7 @@ Disscussion & Testing in Coolapk：<https://www.coolapk.com/feed/6756482>
 - [Helio X20 X25](https://github.com/yc9559/cpufreq-interactive-opt/raw/master/vtools-powercfg/20180603/helio_x20_x25/powercfg.apk)
 - [Helio X10](https://github.com/yc9559/cpufreq-interactive-opt/raw/master/vtools-powercfg/20180603/helio_x10/powercfg.apk)
 - [Atom z3560 z3580](https://github.com/yc9559/cpufreq-interactive-opt/raw/master/vtools-powercfg/20180603/atom_z3560_z3580/powercfg.apk)
+- [Snapdragon 845(非程序生成)](https://github.com/yc9559/cpufreq-interactive-opt/raw/master/vtools-powercfg/20180603/sd_845/powercfg.apk)
 
 ## Credit
 
