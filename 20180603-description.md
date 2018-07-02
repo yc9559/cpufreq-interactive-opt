@@ -59,6 +59,7 @@ Update 20180603.2：
 
 - misc：新的输入升频风格，略微提升最低频率保持2.5s，使得在触摸后interactive选频倾向于保留更多余量
 - misc：低延迟模式的频率动态锁从2.0G降低到1.9G
+- model: 调整了sdm845的参数，同步模板风格
 - template：powercfg执行之后可以输出是否成功，如`balance OK`
 - template：修复由关闭perfd引起的最低频设置过高
 - template：新的架构设计更加抽象，易于移植，易于阅读
@@ -191,7 +192,7 @@ Disscussion & Testing in Coolapk：<https://www.coolapk.com/feed/6756482>
 - [Snapdragon 810 808](https://github.com/yc9559/cpufreq-interactive-opt/raw/master/vtools-powercfg/20180603/sd_810_808/powercfg.apk)
 - [Snapdragon 801 800 805](https://github.com/yc9559/cpufreq-interactive-opt/raw/master/vtools-powercfg/20180603/sd_801_800_805/powercfg.apk)
 - [Snapdragon 660](https://github.com/yc9559/cpufreq-interactive-opt/raw/master/vtools-powercfg/20180603/sd_660/powercfg.apk)
-- [Snapdragon 636](https://github.com/yc9559/cpufreq-interactive-opt/raw/master/vtools-powercfg/20180603/sd_660/powercfg.apk)
+- [Snapdragon 636](https://github.com/yc9559/cpufreq-interactive-opt/raw/master/vtools-powercfg/20180603/sd_636/powercfg.apk)
 - [Snapdragon 652 650](https://github.com/yc9559/cpufreq-interactive-opt/raw/master/vtools-powercfg/20180603/sd_652_650/powercfg.apk)
 - [Snapdragon 625 626](https://github.com/yc9559/cpufreq-interactive-opt/raw/master/vtools-powercfg/20180603/sd_625_626/powercfg.apk)
 - [Exynos 8895](https://github.com/yc9559/cpufreq-interactive-opt/raw/master/vtools-powercfg/20180603/exynos_8895/powercfg.apk)
