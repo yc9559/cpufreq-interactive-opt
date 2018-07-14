@@ -2,7 +2,7 @@
 # Project WIPE https://github.com/yc9559/cpufreq-interactive-opt
 # Author: yc9559
 # Platform: sd_810_808
-# Generated at: Thu Jun 28 03:56:54 2018
+# Generated at: Sat Jul 14 16:45:37 2018
 
 C0_GOVERNOR_DIR="/sys/devices/system/cpu/cpu0/cpufreq/interactive"
 C1_GOVERNOR_DIR="/sys/devices/system/cpu/cpu4/cpufreq/interactive"
@@ -56,10 +56,10 @@ function runonce_custom()
 	set_value 0-3,4-5 /dev/cpuset/foreground/cpus
 	set_value 0-3,4-5 /dev/cpuset/top-app/cpus
 
-	# set_value 85 /proc/sys/kernel/sched_downmigrate
-	# set_value 95 /proc/sys/kernel/sched_upmigrate
+	set_value 85 /proc/sys/kernel/sched_downmigrate
+	set_value 99 /proc/sys/kernel/sched_upmigrate
 
-	lock_value 2 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+	lock_value 0 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
 	lock_value 2 /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
 
 	lock_value "0:1344000 4:1440000" /sys/module/msm_performance/parameters/cpu_max_freq
@@ -188,7 +188,7 @@ if [ "$action" = "debug" ]; then
 	echo "Project WIPE https://github.com/yc9559/cpufreq-interactive-opt"
 	echo "Author: yc9559"
 	echo "Platform: sd_810_808"
-	echo "Generated at: Thu Jun 28 03:56:54 2018"
+	echo "Generated at: Sat Jul 14 16:45:37 2018"
 	echo ""
 	print_value "Cluster 0: min_freq" ${C0_CPUFREQ_DIR}/scaling_min_freq
 	print_param above_hispeed_delay
