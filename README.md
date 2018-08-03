@@ -19,12 +19,16 @@ This project aims to solve the problems above by creating automated programs as 
 - 卡顿和耗电评分函数(cost function of lag and power comsuption)
 - 迭代取得局部最优(iteration to obtain local optimum)
 
+## 项目源码(Source code)
+
+<https://github.com/yc9559/cpufreq-interactive-opt/tree/master/project/20180603.2>
+
 ## Credit
 
 酷安积极反馈的同志(按时间升序)：  
 
 @Fdss45  
-@yy688go (好像不见了)  
+@yy688go (TSU守望者)  
 @Jouiz  
 @lpc3123191239  
 @小方叔叔  
