@@ -21,7 +21,7 @@ This project aims to solve the problems above by creating automated programs as 
 
 ## 项目源码(Source code)
 
-<https://github.com/yc9559/cpufreq-interactive-opt/tree/master/project/20180603.2>
+<https://github.com/yc9559/cpufreq-interactive-opt/tree/master/project/20180603-2>
 
 ## Credit
 
