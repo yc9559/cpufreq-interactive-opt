@@ -1,8 +1,8 @@
 # Project WIPE
 
-> Workload-based Interactive Parameter Explorer
-> Programme Version:    20180603.2
-> Document Version:     20180725
+> Workload-based Interactive Parameter Explorer  
+> Programme Version:    20180603.2  
+> Document Version:     20180725  
 
 ## Warning
 
